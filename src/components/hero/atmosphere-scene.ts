@@ -14,7 +14,7 @@ import {
   WebGLRenderTarget,
 } from 'three';
 
-import { gsap } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import {
   createQualityGovernor,
   decodeChosenImage,
@@ -142,6 +142,8 @@ const subjectFragment = /* glsl */ `
   uniform sampler2D uMap;
   uniform float uTime;
   uniform float uAmp;
+  uniform float uScroll; // scroll-driven phase
+  uniform float uBoost;  // 0..1, how fast the visitor is scrolling
   varying vec2 vUv;
 
   float hash(vec2 p) {
@@ -168,7 +170,8 @@ const subjectFragment = /* glsl */ `
     float w = reach * reach * (3.0 - 2.0 * reach) * body;
 
     float t = uTime;
-    float swing = sin(t * 1.5 - reach * 2.6);
+    // Scrolling advances the swing and throws the hair further.
+    float swing = sin(t * 1.5 - reach * 2.6 + uScroll);
     float ripple = sin(t * 2.7 - reach * 6.0 + top.y * 8.0);
     vec2 drift = vec2(noise(uv * vec2(3.0, 12.0) + t * 0.22),
                       noise(uv * vec2(3.0, 12.0) - t * 0.22 + 7.1)) - 0.5;
@@ -177,7 +180,7 @@ const subjectFragment = /* glsl */ `
            + vec2(0.0, 1.0) * ripple * 0.0045
            + drift * 0.006;
 
-    vec2 suv = uv + d * w * uAmp;
+    vec2 suv = uv + d * w * uAmp * (1.0 + uBoost * 0.9);
     suv.y = max(suv.y, 0.0015); // never pull empty space in at the base
     vec4 c = texture2D(uMap, suv);
     if (suv.x < 0.0 || suv.x > 1.0 || suv.y > 1.0) c = vec4(0.0);
@@ -256,6 +259,8 @@ export function createHeroScene(
     uMap: { value: null as Texture | null },
     uTime: { value: 0 },
     uAmp: { value: 0 },
+    uScroll: { value: 0 },
+    uBoost: { value: 0 },
     uRect: { value: new Vector4(0, 0, 0, 0) },
     uMarginLeft: { value: 0.08 },
   };
@@ -375,6 +380,25 @@ export function createHeroScene(
   let frameInterval = compact ? 1000 / 30 : 0;
   const pointerTarget = new Vector2();
 
+  // The hair answers the scroll: progress through the hero advances the
+  // swing, and scroll speed throws it further, settling when scrolling stops.
+  let scrollTarget = 0;
+  let boostTarget = 0;
+  let lastScroll = 0;
+  const heroSection = canvas.closest('section');
+  const scrollTrigger = heroSection
+    ? ScrollTrigger.create({
+        trigger: heroSection,
+        start: 'top top',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          scrollTarget = self.progress * 5;
+          boostTarget = Math.min(Math.abs(self.getVelocity()) / 1400, 1);
+          lastScroll = performance.now();
+        },
+      })
+    : null;
+
   // Older GPUs: lower resolution, then 30 fps, then hold a still frame.
   const govern = createQualityGovernor(3, (level) => {
     canvas.dataset.quality = String(level); // diagnostics
@@ -400,6 +424,12 @@ export function createHeroScene(
     atmosphereUniforms.uPointer.value.lerp(pointerTarget, 0.035);
     blitUniforms.uTime.value = elapsed;
     subjectUniforms.uTime.value = elapsed;
+    if (performance.now() - lastScroll > 160) boostTarget = 0;
+    const settle = 1 - Math.pow(0.03, Math.min(deltaMs, 64) / 1000);
+    subjectUniforms.uScroll.value +=
+      (scrollTarget - subjectUniforms.uScroll.value) * settle;
+    subjectUniforms.uBoost.value +=
+      (boostTarget - subjectUniforms.uBoost.value) * settle;
     render();
   };
 
@@ -432,6 +462,7 @@ export function createHeroScene(
     disposed = true;
     gsap.ticker.remove(tick);
     gsap.killTweensOf(subjectUniforms.uAmp);
+    scrollTrigger?.kill();
     window.clearTimeout(handOverTimer);
     intersection.disconnect();
     resizeObserver.disconnect();

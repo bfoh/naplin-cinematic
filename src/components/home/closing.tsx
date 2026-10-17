@@ -9,7 +9,8 @@ export function Closing() {
   return (
     <section className={styles.closing} aria-labelledby="closing-title">
       <div className={styles.field} aria-hidden="true">
-        <div className="parallax" data-parallax="10">
+        {/* Moved with the scroll by HairField (no separate parallax). */}
+        <div className="parallax">
           <Image
             src={media.textureField.image}
             alt=""

@@ -59,13 +59,13 @@ const fragmentShader = /* glsl */ `
 
     vec2 d = vec2(sin(uv.y * 8.0 + p * 1.2 + n * 2.0),
                   cos(uv.x * 6.0 - p * 0.9 + n * 1.5));
-    d *= (0.006 + 0.007 * uStir) * uAmp;
+    d *= (0.014 + 0.012 * uStir) * uAmp;
     vec3 col = texture2D(uMap, uv + d).rgb;
 
     // Shine travelling across the strands; it brightens existing highlights.
     float lane = dot(uv, vec2(0.8, 0.6)) * 1.6 - p * 0.22 + n * 0.15;
     float sheen = pow(1.0 - abs(2.0 * fract(lane) - 1.0), 6.0);
-    col += col * sheen * 0.35 * uAmp;
+    col += col * sheen * 0.55 * uAmp;
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -173,12 +173,12 @@ export function createHairField(
     start: 'top bottom',
     end: 'bottom top',
     onUpdate: (self) => {
-      targetPhase = self.progress * 6;
+      targetPhase = self.progress * 10;
       targetStir = Math.min(Math.abs(self.getVelocity()) / 2500, 1);
       lastScroll = performance.now();
     },
   });
-  targetPhase = trigger.progress * 6;
+  targetPhase = trigger.progress * 10;
   uniforms.uPhase.value = targetPhase;
 
   let inView = false;

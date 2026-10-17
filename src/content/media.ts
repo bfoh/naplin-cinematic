@@ -7,6 +7,7 @@ import chapterMovement from '@/media/chapter-movement-concept.webp';
 import chapterTexture from '@/media/chapter-texture-concept.webp';
 import craftBraiding from '@/media/craft-braiding-concept.webp';
 import flowConfidence from '@/media/flow-confidence-concept.webp';
+import flowConfidenceCutout from '@/media/flow-confidence-cutout-concept.webp';
 import heroCutout from '@/media/hero-movement-cutout-concept.webp';
 import portraitCurls from '@/media/portrait-curls-concept.webp';
 import portraitStraight from '@/media/portrait-straight-concept.webp';
@@ -81,6 +82,14 @@ export const media = {
     disclosure: CONCEPT,
     provenance: 'owner-generated',
     origin: 'campaign-confidence-concept.png, full frame',
+  },
+  flowCutout: {
+    image: flowConfidenceCutout,
+    alt: 'A woman in a draped burgundy gown, long black body-wave hair falling past her shoulders.',
+    disclosure: CONCEPT,
+    provenance: 'owner-generated',
+    origin:
+      'campaign-confidence-cutout-concept.png: studio backdrop removed with Apple Vision (scripts/lift-subject.swift)',
   },
   confidence: {
     image: campaignCrimson,

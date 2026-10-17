@@ -16,13 +16,23 @@ export function Flow() {
       </h2>
       <div className={styles.media}>
         <div className="parallax" data-parallax="6">
+          {/* Desktop: the full photograph under the wine veil. */}
           <Image
             src={media.flow.image}
             alt={media.flow.alt}
-            sizes="(min-width: 900px) 74vw, 100vw"
+            sizes="(min-width: 900px) 74vw, 1px"
             placeholder="blur"
             quality={80}
-            className={styles.image}
+            className={`${styles.image} ${styles.wide}`}
+          />
+          {/* Phones: the portrait without its studio backdrop, resting on the
+              section colour. Hidden images are never downloaded (lazy). */}
+          <Image
+            src={media.flowCutout.image}
+            alt={media.flowCutout.alt}
+            sizes="(min-width: 900px) 1px, 100vw"
+            quality={80}
+            className={`${styles.image} ${styles.cutout}`}
           />
         </div>
         <span className={styles.veil} aria-hidden="true" />

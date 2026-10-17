@@ -46,6 +46,13 @@ const jobs = [
     out: 'campaign-crimson-concept.webp',
     from: 'supplied-portrait-crimson-concept.png',
   },
+  // "Let it flow" on phones: the same portrait with its studio backdrop
+  // removed (scripts/lift-subject.swift), resting on the section colour.
+  {
+    out: 'flow-confidence-cutout-concept.webp',
+    from: 'campaign-confidence-cutout-concept.png',
+    alpha: true,
+  },
   { out: 'portrait-waves-concept.webp', from: 'editorial-waves-concept.png' },
   {
     out: 'portrait-straight-concept.webp',

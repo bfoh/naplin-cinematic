@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { registerGsap } from '@/lib/gsap';
+import { gsap, MOTION_OK, registerGsap } from '@/lib/gsap';
 import { canUseHeavyGraphics, prepareCanvas, releaseCanvas } from '@/lib/webgl';
 
 const FIELD_CONTEXT: WebGLContextAttributes = {
@@ -14,10 +14,10 @@ const FIELD_CONTEXT: WebGLContextAttributes = {
 };
 
 /**
- * Animates the closing chapter's hair texture with the scroll. Sits beside
- * the static <img> inside the parallax layer. Nothing is created until the
- * section approaches, and three.js downloads only after a WebGL2 context is
- * verified; never with reduced motion, Save-Data or little memory.
+ * Animates the closing chapter's hair texture with the scroll. A turning,
+ * drifting sweep runs on every device with motion allowed; where WebGL2 is
+ * available, strand waves are added on top (three.js downloads only after a
+ * context is verified; never with reduced motion, Save-Data or little memory).
  */
 export function HairField() {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,13 +25,39 @@ export function HairField() {
   useEffect(() => {
     const layer = ref.current;
     const section = layer?.closest('section');
-    const image = layer?.parentElement?.querySelector('img');
-    if (!layer || !section || !image) return;
+    const wrapper = layer?.parentElement;
+    const image = wrapper?.querySelector('img');
+    if (!layer || !section || !wrapper || !image) return;
+    registerGsap();
+
+    // Every device (no WebGL needed): the hair texture turns and drifts as
+    // the section scrolls through. Scale keeps the edges covered throughout.
+    const sweep = gsap.matchMedia();
+    sweep.add(MOTION_OK, () => {
+      gsap.fromTo(
+        wrapper,
+        { rotate: -3.5, scale: 1.28, xPercent: -2, yPercent: -6 },
+        {
+          rotate: 3.5,
+          scale: 1.2,
+          xPercent: 2,
+          yPercent: 6,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        },
+      );
+    });
+
     if (
       !canUseHeavyGraphics() ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     )
-      return;
+      return () => sweep.revert();
 
     let disposed = false;
     let dispose: (() => void) | null = null;
@@ -44,7 +70,6 @@ export function HairField() {
         import('./hair-field-scene')
           .then(({ createHairField }) => {
             if (disposed) return releaseCanvas(prepared);
-            registerGsap();
             try {
               dispose = createHairField(prepared, { image, section });
             } catch {
@@ -62,6 +87,7 @@ export function HairField() {
       disposed = true;
       approach.disconnect();
       dispose?.();
+      sweep.revert();
     };
   }, []);
 
