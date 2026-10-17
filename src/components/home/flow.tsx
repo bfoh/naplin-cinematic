@@ -21,7 +21,7 @@ export function Flow() {
             alt={media.flow.alt}
             sizes="(min-width: 900px) 74vw, 100vw"
             placeholder="blur"
-            quality={88}
+            quality={80}
             className={styles.image}
           />
         </div>

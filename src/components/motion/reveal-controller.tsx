@@ -5,10 +5,11 @@ import { useEffect } from 'react';
 import {
   DESKTOP_MOTION,
   gsap,
-  MOTION_OK,
+  PHONE_MOTION,
   registerGsap,
   ScrollTrigger,
   SplitText,
+  TABLET_UP_MOTION,
 } from '@/lib/gsap';
 
 /**
@@ -22,6 +23,10 @@ import {
  *
  * Content is fully visible without JS, with reduced motion, and after the
  * boot-script failsafe; CSS only stages it while this controller is active.
+ *
+ * Phones get a lighter path: no text splitting or clip-paths (layout and
+ * paint cost), nothing already on screen is hidden, and the rest rises in
+ * through one batched trigger.
  */
 export function RevealController() {
   useEffect(() => {
@@ -30,9 +35,29 @@ export function RevealController() {
     const restores: (() => void)[] = [];
     const mm = gsap.matchMedia();
 
+    mm.add(PHONE_MOTION, () => {
+      const pending = gsap.utils
+        .toArray<HTMLElement>('[data-reveal]')
+        .filter((el) => el.getBoundingClientRect().top > window.innerHeight);
+      if (!pending.length) return;
+      gsap.set(pending, { autoAlpha: 0, y: 28 });
+      ScrollTrigger.batch(pending, {
+        start: 'top 92%',
+        once: true,
+        onEnter: (batch) =>
+          gsap.to(batch, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.08,
+            overwrite: true,
+          }),
+      });
+    });
+
     const setup = () => {
       if (cancelled) return;
-      mm.add(MOTION_OK, () => {
+      mm.add(TABLET_UP_MOTION, () => {
         const start = 'top 88%';
 
         gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
@@ -47,7 +72,8 @@ export function RevealController() {
               type: 'lines',
               mask: 'lines',
               linesClass: 'split-line',
-              aria: 'auto',
+              // Whole lines read naturally; no ARIA rewriting needed.
+              aria: 'none',
             });
             // Grid stops the masks' compensating margins from collapsing.
             el.style.display = 'grid';

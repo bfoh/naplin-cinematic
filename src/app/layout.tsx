@@ -12,8 +12,10 @@ import { bootScript } from '@/lib/boot-script';
 import './globals.css';
 
 // Self-hosted at build time by next/font: no runtime font CDN.
+// Only weight 300 is used, so static files beat the variable font on bytes.
 const display = Cormorant_Garamond({
   subsets: ['latin'],
+  weight: ['300'],
   style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',

@@ -1,6 +1,6 @@
 'use client';
 
-import Lenis from 'lenis';
+import type Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
 import {
   createContext,
@@ -40,19 +40,31 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     // Lenis is driven by the single GSAP ticker: no second RAF loop.
     const tick = (time: number) => lenisRef.current?.raf(time * 1000);
 
+    let cancelled = false;
+    let loading = false;
+    // Lenis is loaded only where it is used (desktop), never on phones.
     const start = () => {
-      if (lenisRef.current) return;
-      const instance = new Lenis({
-        autoRaf: false,
-        lerp: 0.1,
-        anchors: { offset: -72 },
-        stopInertiaOnNavigate: true,
-      });
-      instance.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0);
-      lenisRef.current = instance;
-      setLenis(instance);
+      if (lenisRef.current || loading) return;
+      loading = true;
+      import('lenis')
+        .then(({ default: LenisClass }) => {
+          loading = false;
+          if (cancelled || lenisRef.current || !query.matches) return;
+          const instance = new LenisClass({
+            autoRaf: false,
+            lerp: 0.1,
+            anchors: { offset: -72 },
+            stopInertiaOnNavigate: true,
+          });
+          instance.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add(tick);
+          gsap.ticker.lagSmoothing(0);
+          lenisRef.current = instance;
+          setLenis(instance);
+        })
+        .catch(() => {
+          loading = false; // native scrolling remains
+        });
     };
 
     const stop = () => {
@@ -68,6 +80,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     sync();
     query.addEventListener('change', sync);
     return () => {
+      cancelled = true;
       query.removeEventListener('change', sync);
       stop();
     };

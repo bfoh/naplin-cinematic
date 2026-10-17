@@ -16,6 +16,10 @@ export function registerGsap() {
 }
 
 export const MOTION_OK = '(prefers-reduced-motion: no-preference)';
+export const TABLET_UP_MOTION =
+  '(min-width: 768px) and (prefers-reduced-motion: no-preference)';
+export const PHONE_MOTION =
+  '(max-width: 767px) and (prefers-reduced-motion: no-preference)';
 export const DESKTOP_MOTION =
   '(min-width: 1024px) and (prefers-reduced-motion: no-preference)';
 

@@ -15,8 +15,8 @@ import {
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import {
   createQualityGovernor,
-  createWebGL2Context,
   decodeChosenImage,
+  type PreparedCanvas,
 } from '@/lib/webgl';
 
 const vertexShader = /* glsl */ `
@@ -74,36 +74,19 @@ const fragmentShader = /* glsl */ `
 type Options = { image: HTMLImageElement; section: HTMLElement };
 
 /**
- * Scroll-driven hair movement for the closing chapter. Draws into a fresh
- * canvas in `container`, over the static <img>. Returns a disposer, or null
- * when WebGL2 is unavailable (the static image then simply remains).
+ * Scroll-driven hair movement for the closing chapter, drawn over the static
+ * <img> on a prepared canvas whose WebGL2 context is already verified.
+ * Returns a disposer, or null if three.js cannot start.
  */
 export function createHairField(
-  container: HTMLElement,
+  { canvas, gl }: PreparedCanvas,
   { image, section }: Options,
 ) {
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  container.appendChild(canvas);
-
-  const gl = createWebGL2Context(canvas, {
-    alpha: false,
-    antialias: false,
-    depth: false,
-    stencil: false,
-    powerPreference: 'low-power',
-  });
-  if (!gl) {
-    canvas.remove();
-    return null;
-  }
-
   let renderer: WebGLRenderer;
   try {
     renderer = new WebGLRenderer({ canvas, context: gl });
   } catch {
-    canvas.remove();
-    return null;
+    return null; // the caller releases the canvas
   }
 
   const compact = window.matchMedia(
@@ -215,13 +198,19 @@ export function createHairField(
   });
   const tick = (_time: number, deltaMs: number) => {
     if (!inView || !texture) return;
+    // Phones render only while something moves; idle frames cost nothing.
+    const settling =
+      Math.abs(targetPhase + drift - uniforms.uPhase.value) > 0.0005 ||
+      uniforms.uStir.value > 0.002 ||
+      gsap.isTweening(uniforms.uAmp);
+    if (compact && !settling) return;
     govern(deltaMs);
     pending += deltaMs;
     if (pending < frameInterval) return;
     const seconds = Math.min(pending, 64) / 1000;
     pending = 0;
     if (performance.now() - lastScroll > 160) targetStir = 0;
-    drift += seconds * 0.05; // barely-there breathing when idle
+    if (!compact) drift += seconds * 0.05; // barely-there breathing when idle
     const ease = 1 - Math.pow(0.04, seconds); // frame-rate independent
     uniforms.uPhase.value +=
       (targetPhase + drift - uniforms.uPhase.value) * ease;

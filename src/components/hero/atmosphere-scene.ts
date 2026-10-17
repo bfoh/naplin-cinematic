@@ -17,8 +17,8 @@ import {
 import { gsap } from '@/lib/gsap';
 import {
   createQualityGovernor,
-  createWebGL2Context,
   decodeChosenImage,
+  type PreparedCanvas,
 } from '@/lib/webgl';
 
 const fullscreenVertex = /* glsl */ `
@@ -194,40 +194,18 @@ type Options = {
 };
 
 /**
- * Builds the hero scene in a fresh canvas appended to `container`. Returns a
- * disposer, or null when WebGL2 is unavailable (the CSS still then remains).
+ * Builds the hero scene on a prepared canvas whose WebGL2 context has already
+ * been verified. Returns a disposer, or null if three.js cannot start.
  */
 export function createHeroScene(
-  container: HTMLElement,
+  { canvas, gl }: PreparedCanvas,
   { animate, subject }: Options,
 ) {
-  // A new canvas every time: a canvas whose context was lost can never
-  // produce a working context again.
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  container.appendChild(canvas);
-
-  // Create and verify the context first, so an unusable one falls back
-  // quietly instead of failing inside three.js.
-  const gl = createWebGL2Context(canvas, {
-    alpha: false,
-    antialias: false,
-    depth: false,
-    stencil: false,
-    premultipliedAlpha: true,
-    powerPreference: 'default',
-  });
-  if (!gl) {
-    canvas.remove();
-    return null;
-  }
-
   let renderer: WebGLRenderer;
   try {
     renderer = new WebGLRenderer({ canvas, context: gl });
   } catch {
-    canvas.remove();
-    return null;
+    return null; // the caller releases the canvas
   }
 
   const compact = window.matchMedia(

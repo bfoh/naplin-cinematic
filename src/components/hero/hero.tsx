@@ -17,9 +17,10 @@ export function Hero() {
         <Image
           src={media.hero.image}
           alt={media.hero.alt}
-          priority
-          quality={88}
-          sizes="(min-width: 1024px) 58vw, (min-width: 768px) 76vh, 120vw"
+          loading="eager"
+          fetchPriority="high"
+          quality={80}
+          sizes="(min-width: 1024px) 58vw, (min-width: 768px) 76vh, 106vw"
           className={styles.subjectImage}
         />
       </div>

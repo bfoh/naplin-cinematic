@@ -45,3 +45,7 @@ Safari/iOS and Firefox rendering; real phones and low-end GPUs; screen readers (
 Added at the owner's request; see `docs/DECISIONS.md`. Verified on the dev server in headless Chromium (CPU-rendered WebGL) at 1440×783 and 390×844: canvas created only near the section, ready, no console errors; absent under reduced motion. Inspected with the veil removed against the static image: aligned framing, waves and shine present, an edge smear found and fixed. Suite: 64 passed, 16 skipped by design.
 
 Not measured: real-GPU frame rates. Automated Chrome here falls back to CPU rendering (about 3–14 fps even on non-WebGL parts of the page), so those numbers say nothing about real devices. A frame-time governor protects older GPUs; please judge smoothness in your own browser.
+
+## Follow-up 3, 2026-10-17 — mobile optimisation
+
+Lighthouse figures in `docs/DECISIONS.md`. Suite: 65 passed, 1 failed (axe colour contrast on the new mobile "Let it flow" caption), fixed by raising the caption to 82% opacity; the accessibility suite was re-run (12/12 passed). New phone tests: no curtain and nothing on screen hidden while scripts load; Lenis not downloaded; below-the-fold content reveals. The owner's 2014 MacBook Pro has no usable WebGL in Chrome ("GPU process was unable to boot") or Safari (context lost at creation), so the WebGL effects correctly show still images there; they need to be judged on a phone or newer computer.

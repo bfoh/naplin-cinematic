@@ -10,6 +10,7 @@ type Props = {
   /** Aspect ratio of the frame, e.g. "4 / 5". Omit when the parent sizes it. */
   ratio?: string;
   position?: string;
+  /** The page's LCP image: fetched eagerly at high priority. */
   priority?: boolean;
   reveal?: 'clip' | 'fade';
   parallax?: number;
@@ -17,7 +18,7 @@ type Props = {
   className?: string;
   frameClassName?: string;
   delay?: number;
-  quality?: 72 | 80 | 88;
+  quality?: 72 | 80;
 };
 
 /**
@@ -42,7 +43,8 @@ export function MediaFigure({
       src={asset.image}
       alt={asset.alt}
       sizes={sizes}
-      priority={priority}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : 'auto'}
       quality={quality}
       placeholder={priority ? 'empty' : 'blur'}
       style={{ objectPosition: position }}

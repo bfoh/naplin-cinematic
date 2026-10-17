@@ -232,3 +232,56 @@
     transform-origin: right;
   }
 }
+
+/* Phones: the entrance is pure CSS, so the headline appears from first paint
+   instead of waiting for JavaScript. Compositor-only properties. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .line > span {
+    animation: hero-line 1.2s var(--ease-out) both;
+  }
+  .line + .line > span {
+    animation-delay: 0.12s;
+  }
+  .copy > :global(.eyebrow),
+  .lead,
+  .actions {
+    animation: hero-rise 1s var(--ease-out) both;
+  }
+  .lead {
+    animation-delay: 0.32s;
+  }
+  .actions {
+    animation-delay: 0.46s;
+  }
+  .subject {
+    animation: hero-settle 2.2s var(--ease-out) both;
+  }
+}
+@keyframes hero-line {
+  from {
+    transform: translateY(112%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hero-settle {
+  from {
+    transform: scale(1.05);
+    transform-origin: 70% 100%;
+  }
+  to {
+    transform: none;
+    transform-origin: 70% 100%;
+  }
+}

@@ -192,3 +192,29 @@ for (const job of jobs) {
     .toFile(path.join(root, 'src/app/opengraph-image.jpg'));
   console.log('src/app/opengraph-image.jpg 1200×630');
 }
+
+// App icons: the official on-dark logo, scaled and centred on ink. No new
+// mark is drawn; at favicon size the droplet emblem carries the identity.
+for (const [file, size] of [
+  ['src/app/icon.png', 512],
+  ['src/app/apple-icon.png', 180],
+]) {
+  const mark = await sharp(output('brand/hair-by-naplin-logo-on-dark.png'))
+    .resize({ width: Math.round(size * 0.8) })
+    .png()
+    .toBuffer();
+  const meta = await sharp(mark).metadata();
+  await sharp({
+    create: { width: size, height: size, channels: 4, background: '#0a090b' },
+  })
+    .composite([
+      {
+        input: mark,
+        left: Math.round((size - (meta.width ?? 0)) / 2),
+        top: Math.round((size - (meta.height ?? 0)) / 2),
+      },
+    ])
+    .png({ compressionLevel: 9 })
+    .toFile(path.join(root, file));
+  console.log(`${file} ${size}×${size}`);
+}

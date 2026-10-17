@@ -170,7 +170,11 @@ test('if the app script never loads, the curtain and staged content fail safe', 
   await expect(page.getByRole('heading', { name: /The Hair/ })).toBeVisible();
 });
 
-test('first visit shows the curtain once per session', async ({ page }) => {
+test('first visit shows the curtain once per session', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'the curtain is desktop-only');
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('data-curtain', 'on');
   await expect(page.locator('html')).not.toHaveAttribute('data-curtain', 'on', {
@@ -219,5 +223,61 @@ test.describe('closing hair field', () => {
       await expect(page.locator(`${closing} canvas`)).toHaveCount(0);
       await expect(page.locator(`${closing} img`)).toBeVisible();
     });
+  });
+});
+
+test.describe('phones', () => {
+  test.skip(({ isMobile }) => !isMobile, 'phone behaviour');
+
+  test('no curtain, and nothing on screen is hidden while scripts load', async ({
+    page,
+  }) => {
+    for (const route of ['/', '/shop', '/academy']) {
+      await page.goto(route);
+      await expect(page.locator('html')).not.toHaveAttribute(
+        'data-curtain',
+        'on',
+      );
+      await page.waitForTimeout(1500);
+      const hidden = await page.$$eval(
+        '[data-reveal], [data-hero-item]',
+        (elements) =>
+          elements
+            .filter((el) => el.getBoundingClientRect().top < window.innerHeight)
+            .filter((el) => {
+              const style = getComputedStyle(el);
+              return (
+                style.visibility === 'hidden' || Number(style.opacity) < 0.99
+              );
+            })
+            .map((el) => el.textContent?.trim().slice(0, 40) || el.tagName),
+      );
+      expect(hidden, route).toEqual([]);
+    }
+  });
+
+  test('desktop-only libraries are not downloaded', async ({ page }) => {
+    const scripts: string[] = [];
+    page.on('response', async (response) => {
+      if (response.request().resourceType() !== 'script') return;
+      const body = await response.text().catch(() => '');
+      if (/lenis-smooth|lenis-stopped/.test(body)) scripts.push('lenis');
+    });
+    await page.goto('/');
+    await page.waitForTimeout(3000);
+    expect(scripts).toEqual([]);
+  });
+
+  test('content below the fold reveals as it scrolls in', async ({ page }) => {
+    await page.goto('/academy');
+    await scrollThrough(page);
+    await page.waitForTimeout(1800); // let the last batch finish fading in
+    const hidden = await page.$$eval(
+      '[data-reveal]',
+      (elements) =>
+        elements.filter((el) => Number(getComputedStyle(el).opacity) < 0.99)
+          .length,
+    );
+    expect(hidden).toBe(0);
   });
 });

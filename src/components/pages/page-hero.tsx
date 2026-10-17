@@ -60,7 +60,7 @@ export function PageHero({
           priority
           reveal="clip"
           delay={0.1}
-          quality={88}
+          quality={80}
         />
       ) : null}
     </section>

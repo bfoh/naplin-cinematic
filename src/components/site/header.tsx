@@ -60,7 +60,7 @@ export function Header() {
         >
           <BrandLogo
             className={styles.label}
-            priority
+            eager
             sizes="(min-width: 768px) 180px, 120px"
           />
         </Link>

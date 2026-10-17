@@ -2,62 +2,72 @@
 
 import { useEffect, useRef } from 'react';
 
+import {
+  afterLoadAndIdle,
+  canUseHeavyGraphics,
+  prepareCanvas,
+  releaseCanvas,
+} from '@/lib/webgl';
+
+// Must suit createHeroScene: opaque canvas, premultiplied portrait blending.
+const HERO_CONTEXT: WebGLContextAttributes = {
+  alpha: false,
+  antialias: false,
+  depth: false,
+  stencil: false,
+  premultipliedAlpha: true,
+  powerPreference: 'default',
+};
+
 /**
  * Hero atmosphere and animated hair. The CSS still behind this layer and the
- * portrait <img> are always present; the scene creates its own canvas, fades
- * it in after the first frame and takes over the portrait only once ready.
- * Three.js loads lazily, never on Save-Data or without WebGL2.
+ * portrait <img> are always present. Only once the page has loaded and a
+ * WebGL2 context is verified does three.js download; devices without WebGL,
+ * on Save-Data or with little memory never fetch it.
  */
 export function Atmosphere() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const layer = ref.current;
-    if (!layer) return;
-    const connection = (
-      navigator as Navigator & { connection?: { saveData?: boolean } }
-    ).connection;
-    if (connection?.saveData) return;
-
+    if (!layer || !canUseHeavyGraphics()) return;
     const animate = !window.matchMedia('(prefers-reduced-motion: reduce)')
       .matches;
     let disposed = false;
     let dispose: (() => void) | null = null;
-
     let retry = 0;
-    const start = () => {
+
+    const attempt = () => {
+      if (disposed) return true;
+      const prepared = prepareCanvas(layer, HERO_CONTEXT);
+      if (!prepared) return false;
       import('./atmosphere-scene')
         .then(({ createHeroScene }) => {
-          const attempt = () => {
-            if (disposed) return null;
-            const subject = document.querySelector<HTMLImageElement>(
-              '#hero [data-hero-subject] img',
-            );
-            try {
-              return createHeroScene(layer, { animate, subject });
-            } catch {
-              return null; // the CSS still and the <img> remain
-            }
-          };
-          dispose = attempt();
-          // A context can come back lost while the GPU is busy (seen in
-          // Safari); try once more on a fresh canvas before settling.
-          if (!dispose)
-            retry = window.setTimeout(() => (dispose = attempt()), 1500);
+          if (disposed) return releaseCanvas(prepared);
+          const subject = document.querySelector<HTMLImageElement>(
+            '#hero [data-hero-subject] img',
+          );
+          try {
+            dispose = createHeroScene(prepared, { animate, subject });
+          } catch {
+            dispose = null;
+          }
+          if (!dispose) releaseCanvas(prepared); // the CSS still remains
         })
-        .catch(() => {});
+        .catch(() => releaseCanvas(prepared));
+      return true;
     };
 
-    const hasIdle = 'requestIdleCallback' in window;
-    const idle = hasIdle
-      ? window.requestIdleCallback(start, { timeout: 1800 })
-      : window.setTimeout(start, 700);
+    const cancelSchedule = afterLoadAndIdle(() => {
+      // A context can come back lost while the GPU is busy (seen in Safari);
+      // try once more on a fresh canvas before settling on the still.
+      if (!attempt()) retry = window.setTimeout(attempt, 1500);
+    });
 
     return () => {
       disposed = true;
+      cancelSchedule();
       window.clearTimeout(retry);
-      if (hasIdle) window.cancelIdleCallback(idle);
-      else window.clearTimeout(idle);
       dispose?.();
     };
   }, []);

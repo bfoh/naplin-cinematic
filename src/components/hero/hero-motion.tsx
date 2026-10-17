@@ -22,6 +22,8 @@ export function HeroMotion() {
       gsap.set(items, { visibility: 'visible' });
       return;
     }
+    // Phones: the entrance runs in CSS from first paint (hero.module.css).
+    if (window.matchMedia('(max-width: 767px)').matches) return;
 
     const ctx = gsap.context(() => {}, hero);
     let started = false;

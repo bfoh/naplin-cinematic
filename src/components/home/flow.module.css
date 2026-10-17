@@ -6,7 +6,8 @@
   isolation: isolate;
   display: grid;
   align-content: center;
-  background: var(--oxblood);
+  /* Phones: the photograph's own backdrop colour, so image and section are one. */
+  background: #66341f;
   overflow: clip;
   padding: clamp(80px, 22vw, 140px) 0 clamp(56px, 14vw, 96px);
 }
@@ -33,6 +34,17 @@
   overflow: hidden;
   margin: calc(var(--title-size) * -0.42) var(--gutter) 0;
 }
+.media {
+  /* Feather every edge so the photograph dissolves into the section. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent),
+    linear-gradient(to bottom, transparent, #000 12%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent),
+    linear-gradient(to bottom, transparent, #000 12%, #000 90%, transparent);
+  mask-composite: intersect;
+}
 .image {
   width: 100%;
   height: 100%;
@@ -44,8 +56,8 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgb(73 23 33 / 0.55),
-    rgb(73 23 33 / 0) 26%
+    rgb(102 52 31 / 0.5),
+    rgb(102 52 31 / 0) 26%
   );
 }
 
@@ -60,16 +72,20 @@
 
 .disclosure {
   margin: 14px var(--gutter) 0;
-  color: rgb(240 234 225 / 0.6);
+  /* 0.82 keeps 4.5:1+ on the lighter mobile backdrop. */
+  color: rgb(240 234 225 / 0.82);
 }
 
 @media (min-width: 900px) {
   .flow {
+    background: var(--oxblood);
     --title-size: clamp(7rem, 15.5vw, 17rem);
     min-height: max(100svh, 680px);
     padding: 0;
   }
   .media {
+    -webkit-mask-image: none;
+    mask-image: none;
     position: absolute;
     inset: 0 0 0 24%;
     aspect-ratio: auto;

@@ -104,7 +104,15 @@ export function Chapters() {
           const tl = gsap.timeline({
             scrollTrigger: { trigger: tier, start: 'top 82%', once: true },
           });
-          if (figure) {
+          // Phones: opacity and transform only (no clip-path repaints).
+          const phone = window.matchMedia('(max-width: 767px)').matches;
+          if (figure && phone) {
+            tl.fromTo(
+              figure,
+              { autoAlpha: 0, y: 36 },
+              { autoAlpha: 1, y: 0, duration: 1.2 },
+            );
+          } else if (figure) {
             tl.fromTo(
               figure,
               { clipPath: 'inset(100% 0% 0% 0%)' },
@@ -116,7 +124,12 @@ export function Chapters() {
             );
           }
           if (img)
-            tl.fromTo(img, { scale: 1.18 }, { scale: 1, duration: 1.8 }, 0.1);
+            tl.fromTo(
+              img,
+              { scale: phone ? 1.08 : 1.18 },
+              { scale: 1, duration: 1.8 },
+              0.1,
+            );
           if (word) tl.from(word, { yPercent: 110, duration: 1.3 }, 0.45);
           if (line) tl.from(line, { yPercent: 115, duration: 1.2 }, 0.6);
         });
@@ -178,7 +191,7 @@ export function Chapters() {
                     alt={asset.alt}
                     sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
                     placeholder="blur"
-                    quality={88}
+                    quality={80}
                   />
                   <span
                     className={styles.shade}

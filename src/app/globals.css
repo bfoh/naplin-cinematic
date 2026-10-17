@@ -97,6 +97,12 @@ a {
   text-decoration: none;
 }
 
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 button {
   font: inherit;
   color: inherit;
@@ -341,9 +347,12 @@ html.lenis body {
   margin: -0.1em -0.14em -0.14em;
 }
 
-/* ---------- staged entrance states (JS + motion allowed only) ---------- */
+/* ---------- staged entrance states (JS + motion allowed only) ----------
+   Tablets and desktops only. Phones never hide content while JavaScript
+   loads: the hero animates in pure CSS and below-the-fold reveals are set
+   up by script once it runs. */
 
-@media (prefers-reduced-motion: no-preference) {
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   html.js:not(.reveal-failsafe) [data-reveal='lines'],
   html.js:not(.reveal-failsafe) [data-reveal='fade'],
   html.js:not(.reveal-failsafe) [data-hero-item] {
@@ -354,7 +363,14 @@ html.lenis body {
   }
 }
 
-/* ---------- film grain ---------- */
+/* ---------- film grain ----------
+   Not on phones: a fixed full-screen layer costs memory and compositing
+   on every scrolled frame for little visible benefit at that size. */
+@media (max-width: 767px) {
+  .grain {
+    display: none;
+  }
+}
 
 .grain {
   pointer-events: none;

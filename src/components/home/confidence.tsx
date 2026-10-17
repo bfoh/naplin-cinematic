@@ -70,16 +70,13 @@ export function Confidence() {
                 once: true,
               },
             })
+            // Phones/tablets: opacity and transform only (no clip-path).
             .fromTo(
               aperture,
-              { clipPath: 'inset(14% 18% 14% 18%)' },
-              {
-                clipPath: 'inset(0% 0% 0% 0%)',
-                duration: 1.6,
-                ease: 'expo.inOut',
-              },
+              { autoAlpha: 0, scale: 0.94 },
+              { autoAlpha: 1, scale: 1, duration: 1.4 },
             )
-            .fromTo(image, { scale: 1.2 }, { scale: 1, duration: 2 }, 0);
+            .fromTo(image, { scale: 1.12 }, { scale: 1, duration: 2 }, 0);
         }
       },
     );
@@ -110,7 +107,7 @@ export function Confidence() {
               alt={media.confidence.alt}
               sizes="(min-width: 1024px) 76svh, 100vw"
               placeholder="blur"
-              quality={88}
+              quality={80}
             />
           </div>
           <figcaption className={`caption ${styles.disclosure}`}>

@@ -62,3 +62,63 @@ export function createQualityGovernor(
     }
   };
 }
+
+/** False on Save-Data and on devices reporting under 4 GB of memory. */
+export function canUseHeavyGraphics() {
+  const nav = navigator as Navigator & {
+    connection?: { saveData?: boolean };
+    deviceMemory?: number;
+  };
+  if (nav.connection?.saveData) return false;
+  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 4)
+    return false;
+  return true;
+}
+
+export type PreparedCanvas = {
+  canvas: HTMLCanvasElement;
+  gl: WebGL2RenderingContext;
+};
+
+/**
+ * Appends a fresh canvas and verifies a WebGL2 context on it, before any
+ * rendering library is downloaded. Returns null (and cleans up) if unusable.
+ */
+export function prepareCanvas(
+  container: HTMLElement,
+  attributes: WebGLContextAttributes,
+): PreparedCanvas | null {
+  const canvas = document.createElement('canvas');
+  canvas.setAttribute('aria-hidden', 'true');
+  container.appendChild(canvas);
+  const gl = createWebGL2Context(canvas, attributes);
+  if (!gl) {
+    canvas.remove();
+    return null;
+  }
+  return { canvas, gl };
+}
+
+/** Frees a prepared canvas that will not be used. */
+export function releaseCanvas({ canvas, gl }: PreparedCanvas) {
+  gl.getExtension('WEBGL_lose_context')?.loseContext();
+  canvas.remove();
+}
+
+/** Runs `task` once the page has loaded and the main thread is idle. */
+export function afterLoadAndIdle(task: () => void, timeout = 2500) {
+  let idle = 0;
+  let timer = 0;
+  const hasIdle = 'requestIdleCallback' in window;
+  const schedule = () => {
+    if (hasIdle) idle = window.requestIdleCallback(task, { timeout });
+    else timer = window.setTimeout(task, 900);
+  };
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
+  return () => {
+    window.removeEventListener('load', schedule);
+    if (hasIdle && idle) window.cancelIdleCallback(idle);
+    window.clearTimeout(timer);
+  };
+}

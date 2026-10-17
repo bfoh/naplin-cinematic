@@ -37,3 +37,16 @@ Consequential choices made while building the cinematic edition, with the eviden
 - **Context robustness (Safari error, 2026-10-17).** The owner saw `THREE.WebGLRenderer: null is not an object (gl.getShaderPrecisionFormat…)` in Safari: a context that was already lost. The old code probed with a throwaway context it then force-lost, and created the scene on a React-owned canvas that would be reused after `forceContextLoss()` on remount. Now each scene creates a fresh canvas, creates and verifies its own WebGL2 context before three.js sees it, fails silently to the CSS still, and retries once after 1.5 s.
 - **Curtain:** first visit to `/` per session only, never with reduced motion. Its rule tracks real readiness (fonts and hero image decode) with a 1.8 s cap; CSS hides it after 4 s even if JS fails.
 - **Image formats: AVIF first.** Tested against WebP-only: WebP was about 3× heavier (333 KB vs 109 KB hero on desktop; 146 KB vs 47 KB on phones) and still ~1.5 s to encode cold. AVIF's one-off encode cost (~2.4 s locally on the first request per size) is cached by the optimiser/CDN, while its savings apply to every visit.
+
+## Mobile optimisation (2026-10-17)
+
+Measured with Lighthouse mobile (emulated mid-range phone, slow 4G, 4x CPU), median of three interleaved runs against the previous commit: performance 79 → 84 (steadier), Total Blocking Time 314 → 98 ms, Speed Index 3.9 → 2.9 s, time to interactive 5.4 → 4.5 s, JavaScript 345 → 207 KB, total weight 757 → 582 KB; accessibility and best practices 96 → 100. LCP stayed ~4.0–4.3 s: its remaining cost is paint delay on this machine's GPU-less Chrome, not loading.
+
+- **WebGL context first, three.js second.** Components create the canvas and verify a WebGL2 context, then import the scene. Devices without WebGL, on Save-Data or reporting under 4 GB of memory never download three.js; it also waits for the page `load` event and idle time.
+- **Lenis is imported only when desktop smooth scrolling applies.**
+- **Phones never hide content while scripts load:** no curtain (desktop only), a CSS-only hero entrance, and reveals that leave on-screen content alone and fade the rest in through one batched trigger — no SplitText or clip-paths on phones.
+- **Hero image fetch priority.** Next 16 deprecated `priority`; it no longer raised fetch priority, so the LCP image was requested at Low. It now uses `fetchPriority="high"` and `loading="eager"`.
+- **Bytes:** image quality 88 → 80, tighter hero `sizes`, static weight-300 Cormorant files instead of the variable font (preloaded fonts ~100 → 67 KB).
+- **Battery:** no fixed grain layer on phones; the closing hair field renders only while it moves.
+- **Icons:** `icon.png`, `apple-icon.png` and a web manifest from the official on-dark logo, scaled on ink (no new mark).
+- **"Let it flow" on phones (owner request):** the section takes the photograph's own backdrop colour (#66341F, sampled from its edges) and the photo is feathered on all sides, so image and section read as one. Desktop keeps the wine treatment.
