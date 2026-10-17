@@ -60,12 +60,13 @@ tests/                   Playwright specs
 
 - **No JavaScript:** every section renders fully; navigation works.
 - **Reduced motion:** no curtain, no smooth scroll, no pinning, no reveals, static marquee and grain, a single still frame of the atmosphere.
-- **No WebGL / Save-Data / renderer failure:** the CSS still atmosphere and the static portrait remain; nothing errors.
+- **No WebGL / renderer failure:** the CSS still atmosphere remains, and the hero hair still moves through a 2D-canvas fallback; nothing errors.
+- **Save-Data / under 4 GB of memory:** the CSS still atmosphere and the static portrait remain.
 - **Closing hair field:** with WebGL and motion allowed, the closing texture moves with the scroll; otherwise it is a still photograph.
-- **Slow GPUs:** both WebGL scenes lower their resolution, then their frame rate, then hold a still frame if frames drop below ~42 fps.
-- **Hair motion:** only with WebGL and motion allowed. The portrait `<img>` hands over to an identical WebGL copy whose hair alone moves.
-- **Script failure:** a boot-script fail-safe reveals staged content and the curtain hides itself after 4 s.
-- **Phones:** native scrolling, no pins, a lighter shader (lower resolution, 30 fps), static grain, no cursor effects.
+- **Slow GPUs:** both WebGL scenes lower their resolution, then their frame rate, then stop their idle motion if frames drop below ~42 fps; the hero hair still answers the scroll.
+- **Hair motion:** with motion allowed, the portrait `<img>` hands over to an identical copy (WebGL, or 2D canvas without WebGL) whose hair alone moves: an idle swing, plus a lift, toss and ripples that follow the scroll (`src/components/hero/hair-motion.ts`).
+- **Script failure:** a boot-script fail-safe reveals staged content, returns the phone stages to the natural sequence, and the curtain hides itself after 4 s.
+- **Phones:** the same scroll choreography as desktop: line reveals, image wipes, parallax, the hero scroll-out, and the Texture / Movement / Finish and Wear your confidence sequences on CSS-sticky stages (native scrolling, no JS pinning). Also a lighter shader (lower resolution, 30 fps), static grain and no cursor effects.
 
 ## Deploying as a separate Vercel project
 

@@ -12,7 +12,7 @@ All results below were produced locally on macOS against the production build (`
 | `pnpm format:check`                                                  | Pass                                                                                         |
 | `pnpm test` (Playwright, desktop 1440×900 + mobile 390×844 projects) | **60 passed**, 16 skipped by design (desktop-only or mobile-only tests in the other project) |
 
-The suite covers: every route renders with landmarks and one H1 and no console/runtime errors; every internal link resolves; in-page anchors exist; designed 404; tap-to-call numbers; desktop primary navigation and `aria-current`; the mobile menu (modal, focus wraps inside, Escape closes and restores focus, links navigate and close); skip link; no horizontal overflow and an unclipped H1 at 320×568, 375×812, 390×844, 430×932, 768×1024, 1024×768, 1440×900 and 1920×1080 on every route; 44px targets for header, buttons, footer and phone links on a 375px phone; reduced motion (no curtain, Lenis or pins; all staged content visible); no-JS rendering; desktop pin engages and releases to the footer; phones never pin; WebGL failure keeps the still atmosphere with no errors; WebGL renders when available; curtain shows once per session; fail-safe when all app JS is blocked; axe (WCAG 2.0/2.1/2.2 A–AA tags) with **no serious or critical violations** on all six routes in both projects.
+The suite covers: every route renders with landmarks and one H1 and no console/runtime errors; every internal link resolves; in-page anchors exist; designed 404; tap-to-call numbers; desktop primary navigation and `aria-current`; the mobile menu (modal, focus wraps inside, Escape closes and restores focus, links navigate and close); skip link; no horizontal overflow and an unclipped H1 at 320×568, 375×812, 390×844, 430×932, 768×1024, 1024×768, 1440×900 and 1920×1080 on every route; 44px targets for header, buttons, footer and phone links on a 375px phone; reduced motion (no curtain, Lenis or pins; all staged content visible); no-JS rendering; desktop pin engages and releases to the footer; phones play the artistry and confidence stages on a sticky stage with no pin; without WebGL the atmosphere stays still and the hero hair still lifts with the scroll (measured in the canvas), with no errors; WebGL renders when available; curtain shows once per session; fail-safe when all app JS is blocked; axe (WCAG 2.0/2.1/2.2 A–AA tags) with **no serious or critical violations** on all six routes in both projects.
 
 ## Measurements (local, indicative only)
 
@@ -49,3 +49,26 @@ Not measured: real-GPU frame rates. Automated Chrome here falls back to CPU rend
 ## Follow-up 3, 2026-10-17 — mobile optimisation
 
 Lighthouse figures in `docs/DECISIONS.md`. Suite: 65 passed, 1 failed (axe colour contrast on the new mobile "Let it flow" caption), fixed by raising the caption to 82% opacity; the accessibility suite was re-run (12/12 passed). New phone tests: no curtain and nothing on screen hidden while scripts load; Lenis not downloaded; below-the-fold content reveals. The owner's 2014 MacBook Pro has no usable WebGL in Chrome ("GPU process was unable to boot") or Safari (context lost at creation), so the WebGL effects correctly show still images there; they need to be judged on a phone or newer computer.
+
+## Follow-up 4, 2026-10-17 — hero hair and the scroll
+
+See `docs/DECISIONS.md` (Owner review 4). The dev server was checked in headless Chromium at 390×844 and 1440×783, both with WebGL (CPU-rendered) and with WebGL disabled. In all four setups the hair responded to the scroll, the face stayed still and there were no console errors. Frames were inspected at 2x for column seams; none were found. Suite: 66 passed, 20 skipped by design.
+
+Not verified on real devices. On the owner's Mac the 2D fallback should now animate the hair in Chrome and Safari; on the iPhone it runs in WebGL. With the system's Reduce Motion setting on, the hair stays still by design.
+
+## Follow-up 5, 2026-10-18 — desktop scroll animations on phones
+
+See `docs/DECISIONS.md` (Owner review 5). Checked on the dev server in headless Chromium:
+
+- **390×844:** stage frames at 0, 25, 50, 75 and 100% through each sequence, and each section filmed mid-reveal and settled.
+- **768×1024:** the stages.
+- **Every route at 390×844, 844×390 and 768×1024:** after a full scroll nothing stayed hidden, there was no horizontal overflow and no console errors.
+
+New or extended tests:
+
+- The phone stages hold the screen (sticky, top 0) and advance with the scroll, with no pin spacer.
+- With all app scripts blocked, the stages fall back to the natural sequence with every tier shown.
+- Below-the-fold reveals complete on `/` as well as `/academy`.
+- The no-WebGL hair test now polls for the lift: under full parallel load it once read the canvas before the hair had settled.
+
+Suite: 66 passed, 20 skipped by design. Not verified on real phones; please judge the feel of the stages on your iPhone.

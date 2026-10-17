@@ -204,3 +204,120 @@
   transform: scaleY(0);
   transform-origin: top;
 }
+
+/* ---------- phones and portrait tablets with motion: sticky stage ----------
+   The section supplies the scroll; the stage holds the screen while the
+   tiers play across it, with the words over the foot of the photograph.
+   Applied by CSS from first paint (no relayout when the script starts);
+   the boot failsafe returns to the natural sequence if scripts never run. */
+
+@media (max-width: 1023px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js:not(.reveal-failsafe)) .chapters {
+    height: 340vh; /* before svh support */
+    height: 340svh;
+    padding: 0;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
+    gap: 0;
+    padding: calc(var(--header-h) + 12px) var(--gutter)
+      max(22px, env(safe-area-inset-bottom));
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .intro {
+    grid-row: 1;
+    gap: 10px;
+    max-width: 34rem;
+    margin-bottom: 18px;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .summary {
+    font-size: clamp(1.125rem, 4.6vw, 1.75rem);
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier {
+    display: contents;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier .figure {
+    order: 0;
+    grid-column: 1;
+    grid-row: 2 / 6;
+    min-height: 0;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .frame {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  /* Keeps the words legible over every photograph. */
+  :global(html.js:not(.reveal-failsafe)) .chapters .frame::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 58%;
+    background: linear-gradient(to top, rgb(10 9 11 / 0.82), rgb(10 9 11 / 0));
+    pointer-events: none;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier .word {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    margin: 0;
+    padding-left: clamp(16px, 4.5vw, 32px);
+    font-size: clamp(2.75rem, 12.4vw, 5.25rem);
+    line-height: 1;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier:nth-of-type(1) .word {
+    grid-row: 3;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier:nth-of-type(2) .word {
+    grid-row: 4;
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier:nth-of-type(3) .word {
+    grid-row: 5;
+    padding-bottom: clamp(14px, 4vw, 28px);
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .tier .line {
+    grid-column: 1;
+    grid-row: 6;
+    margin-top: 16px;
+    min-height: 2.5em;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .progress {
+    display: block;
+    position: absolute;
+    right: calc(var(--gutter) * 0.42);
+    top: 38%;
+    height: 28%;
+    width: 1px;
+    background: var(--line);
+  }
+  :global(html.js:not(.reveal-failsafe)) .chapters .progress span {
+    position: absolute;
+    inset: 0;
+    background: var(--champagne);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  /* Until the sequence is set up: its opening frame. */
+  :global(html.js:not(.reveal-failsafe))
+    .chapters:not([data-staged])
+    .tier:nth-of-type(n + 2)
+    .frame {
+    clip-path: inset(100% 0 0 0);
+  }
+  :global(html.js:not(.reveal-failsafe))
+    .chapters:not([data-staged])
+    .tier:nth-of-type(n + 2)
+    .line {
+    visibility: hidden;
+  }
+  :global(html.js:not(.reveal-failsafe))
+    .chapters:not([data-staged])
+    .tier:nth-of-type(n + 2)
+    .word {
+    color: rgb(240 234 225 / 0.3);
+  }
+}

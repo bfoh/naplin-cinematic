@@ -48,6 +48,19 @@
   aspect-ratio: 1122 / 1402;
   pointer-events: none;
 }
+.subjectInner {
+  position: absolute;
+  inset: 0;
+}
+/* 2D fallback canvas for the moving hair, laid exactly over the <img>. */
+.subjectInner :global(canvas) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%);
+  mask-image: linear-gradient(to right, transparent, #000 7%);
+}
 .subjectImage {
   width: 100%;
   height: 100%;

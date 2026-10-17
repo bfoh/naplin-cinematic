@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 
 import { CURTAIN_EVENT } from '@/lib/events';
 import {
-  DESKTOP_MOTION,
   gsap,
+  MOTION_OK,
   prefersReducedMotion,
   registerGsap,
 } from '@/lib/gsap';
@@ -22,8 +22,37 @@ export function HeroMotion() {
       gsap.set(items, { visibility: 'visible' });
       return;
     }
+
+    // Scroll-out on every screen: the copy lifts away while the subject
+    // holds, like a cut.
+    const mm = gsap.matchMedia();
+    mm.add(MOTION_OK, () => {
+      gsap.to('[data-hero-copy]', {
+        yPercent: -18,
+        autoAlpha: 0.15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom 20%',
+          scrub: true,
+        },
+      });
+      gsap.to('[data-hero-subject-inner]', {
+        yPercent: 6,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    });
+
     // Phones: the entrance runs in CSS from first paint (hero.module.css).
-    if (window.matchMedia('(max-width: 767px)').matches) return;
+    if (window.matchMedia('(max-width: 767px)').matches)
+      return () => mm.revert();
 
     const ctx = gsap.context(() => {}, hero);
     let started = false;
@@ -61,32 +90,6 @@ export function HeroMotion() {
       document.documentElement.getAttribute('data-curtain') === 'on';
     const fallback = window.setTimeout(play, curtainActive ? 2600 : 0);
     window.addEventListener(CURTAIN_EVENT, play, { once: true });
-
-    // Desktop scroll-out: copy lifts away while the subject holds, like a cut.
-    const mm = gsap.matchMedia();
-    mm.add(DESKTOP_MOTION, () => {
-      gsap.to('[data-hero-copy]', {
-        yPercent: -18,
-        autoAlpha: 0.15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom 20%',
-          scrub: true,
-        },
-      });
-      gsap.to('[data-hero-subject] img', {
-        yPercent: 6,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    });
 
     return () => {
       window.clearTimeout(fallback);

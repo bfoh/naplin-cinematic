@@ -14,15 +14,19 @@ export function Hero() {
       </div>
 
       <div className={styles.subject} data-hero-subject>
-        <Image
-          src={media.hero.image}
-          alt={media.hero.alt}
-          loading="eager"
-          fetchPriority="high"
-          quality={80}
-          sizes="(min-width: 1024px) 58vw, (min-width: 768px) 76vh, 106vw"
-          className={styles.subjectImage}
-        />
+        {/* Inner layer: takes the scroll-out movement, so the 2D hair canvas
+            (no-WebGL fallback) placed beside the <img> moves with it. */}
+        <div className={styles.subjectInner} data-hero-subject-inner>
+          <Image
+            src={media.hero.image}
+            alt={media.hero.alt}
+            loading="eager"
+            fetchPriority="high"
+            quality={80}
+            sizes="(min-width: 1024px) 58vw, (min-width: 768px) 76vh, 106vw"
+            className={styles.subjectImage}
+          />
+        </div>
       </div>
 
       <div className={styles.content}>

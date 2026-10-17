@@ -48,10 +48,17 @@
 .wide {
   display: none;
 }
-/* Phones never run the parallax, so drop its overscan: the cut-out's crown
-   sits at the very top of the photograph and must not be cropped. */
+/* Phones: no overscan, because the cut-out's crown sits at the very top of
+   the photograph and must never be cropped. The parallax therefore only lets
+   her sink (the space above is the section colour), never rise. */
 .media :global(.parallax) {
   inset: 0;
+}
+@media (max-width: 899px) {
+  .media :global(.parallax) {
+    --parallax-from: 0;
+    --parallax-to: 9;
+  }
 }
 .cutout {
   object-position: 74% 0%;

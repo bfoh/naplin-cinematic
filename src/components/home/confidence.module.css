@@ -107,3 +107,55 @@
     max-width: 21rem;
   }
 }
+
+/* Phones and portrait tablets with motion: a sticky stage. The section
+   supplies the scroll while the aperture opens on screen. Applied by CSS
+   from first paint, like the chapters stage (see chapters.module.css). */
+@media (max-width: 1023px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js:not(.reveal-failsafe)) .confidence {
+    height: 215vh; /* before svh support */
+    height: 215svh;
+  }
+  :global(html.js:not(.reveal-failsafe)) .confidence .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 0;
+    padding: calc(var(--header-h) + 8px) var(--gutter)
+      max(26px, env(safe-area-inset-bottom));
+  }
+  :global(html.js:not(.reveal-failsafe)) .confidence .figure {
+    display: grid;
+    justify-items: center;
+    min-height: 0;
+  }
+  :global(html.js:not(.reveal-failsafe)) .confidence .aperture {
+    height: 100%;
+    width: auto;
+    max-width: none;
+    /* The open frame is shorter than the screen here: feather its top and
+       foot into the field as well as its sides. */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+      linear-gradient(to bottom, transparent, #000 7%, #000 86%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+      linear-gradient(to bottom, transparent, #000 7%, #000 86%, transparent);
+    mask-composite: intersect;
+  }
+  :global(html.js:not(.reveal-failsafe)) .confidence .after {
+    margin-top: 18px;
+  }
+  /* Until the opening is set up: its first frame. */
+  :global(html.js:not(.reveal-failsafe))
+    .confidence:not([data-staged])
+    .aperture {
+    clip-path: inset(22% 34% 22% 34%);
+  }
+  :global(html.js:not(.reveal-failsafe)) .confidence:not([data-staged]) .after {
+    visibility: hidden;
+  }
+}
