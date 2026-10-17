@@ -1,0 +1,50 @@
+.block {
+  display: grid;
+  gap: 40px;
+  padding: clamp(72px, 10vw, 140px) var(--gutter);
+  background: var(--wine-deep);
+  border-top: 1px solid var(--line);
+}
+.copy {
+  display: grid;
+  gap: 18px;
+}
+.title {
+  font-size: var(--fs-h2);
+  max-width: 12ch;
+}
+.intro {
+  max-width: 34rem;
+  font-size: var(--fs-lead);
+  color: var(--text-soft);
+}
+.details {
+  display: grid;
+  gap: 32px;
+}
+.details .eyebrow {
+  margin-bottom: 12px;
+}
+.phones {
+  display: grid;
+  gap: 10px;
+}
+.tel {
+  min-width: min(100%, 300px);
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+}
+.fact {
+  font-family: var(--font-display-stack);
+  font-size: 1.625rem;
+  font-weight: 300;
+  line-height: 1.25;
+}
+
+@media (min-width: 900px) {
+  .block {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    column-gap: 6vw;
+    align-items: start;
+  }
+}

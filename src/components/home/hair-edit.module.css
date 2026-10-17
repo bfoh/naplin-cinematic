@@ -1,0 +1,123 @@
+.edit {
+  background: var(--ink);
+  padding: var(--section-pad) 0;
+}
+
+.head {
+  display: grid;
+  gap: 22px;
+  padding: 0 var(--gutter);
+  margin-bottom: clamp(48px, 7vw, 96px);
+}
+.title {
+  font-size: var(--fs-h2);
+}
+.intro {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  max-width: 30rem;
+  color: var(--text-soft);
+}
+
+/* Phones: a native swipe rail with the next piece in view. */
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 360px);
+  gap: 14px;
+  padding: 0 var(--gutter) 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.item {
+  scroll-snap-align: start;
+}
+
+.card {
+  display: block;
+}
+.frame {
+  aspect-ratio: 4 / 5;
+}
+.image {
+  transition: transform 1400ms var(--ease-out);
+}
+.card:hover .image,
+.card:focus-visible .image {
+  transform: scale(1.045);
+}
+
+.meta {
+  display: grid;
+  gap: 6px;
+  padding-top: 18px;
+}
+.name {
+  font-family: var(--font-sans-stack);
+  font-size: 0.78125rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.line {
+  font-family: var(--font-display-stack);
+  font-size: 1.375rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--text-soft);
+}
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.card:hover .more :global(.btn__arrow),
+.card:focus-visible .more :global(.btn__arrow) {
+  transform: translateX(4px);
+}
+.disclosure {
+  margin-top: 4px;
+  font-size: 0.625rem;
+}
+
+@media (min-width: 1024px) {
+  .head {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: end;
+    column-gap: 6vw;
+  }
+  .head > :first-child {
+    grid-column: 1 / -1;
+  }
+  .intro {
+    padding-bottom: 1.2vw;
+  }
+  /* Desktop: a staggered editorial spread, no horizontal hijack. */
+  .rail {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.2vw;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  .item[data-index='1'] {
+    margin-top: 16vh;
+  }
+  .item[data-index='2'] {
+    margin-top: 6vh;
+  }
+}

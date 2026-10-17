@@ -1,0 +1,234 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: max(100svh, 600px);
+  overflow: clip;
+  background: var(--ink);
+}
+
+/* Still atmosphere: the fallback whenever WebGL is unavailable or reduced. */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(52% 62% at 70% 44%, rgb(101 31 50 / 0.62), transparent 72%),
+    radial-gradient(38% 46% at 92% 86%, rgb(73 23 33 / 0.8), transparent 74%),
+    radial-gradient(
+      34% 40% at 54% 12%,
+      rgb(200 168 120 / 0.06),
+      transparent 70%
+    ),
+    radial-gradient(60% 70% at 8% 90%, rgb(42 12 21 / 0.85), transparent 70%),
+    var(--ink);
+}
+.atmosphere :global(.hero-scene) {
+  position: absolute;
+  inset: 0;
+}
+.atmosphere canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1800ms var(--ease-out);
+}
+.atmosphere canvas[data-ready='true'] {
+  opacity: 1;
+}
+
+.subject {
+  position: absolute;
+  z-index: 1;
+  right: -5vw;
+  bottom: 0;
+  height: min(60svh, 136vw);
+  aspect-ratio: 1122 / 1402;
+  pointer-events: none;
+}
+.subjectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  /* The source photo crops the hair at its left edge: feather it away. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%);
+  mask-image: linear-gradient(to right, transparent, #000 7%);
+}
+/* Once WebGL renders the identical portrait (with moving hair) behind the
+   copy, the <img> steps aside. It stays in the DOM for LCP, alt text and any
+   fallback. */
+.subject[data-gl='on'] .subjectImage {
+  opacity: 0;
+}
+
+/* Phones: an ink scrim under the actions keeps them legible over the gown. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 34%;
+  background: linear-gradient(to top, rgb(10 9 11 / 0.92), rgb(10 9 11 / 0));
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: inherit;
+  padding: calc(var(--header-h) + 52px) var(--gutter)
+    max(32px, env(safe-area-inset-bottom));
+}
+
+.copy {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
+.title {
+  font-size: var(--fs-hero);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+}
+.line {
+  display: block;
+  overflow: clip;
+  padding: 0.04em 0.12em 0.16em 0.02em;
+  margin: -0.04em -0.12em -0.16em -0.02em;
+}
+.line > span {
+  display: inline-block;
+}
+.title em {
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  max-width: min(30ch, 56vw);
+  font-size: 0.9375rem;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.scroll {
+  display: none;
+}
+
+.disclosure {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter);
+  top: calc(var(--header-h) + 18px);
+  writing-mode: vertical-rl;
+  font-size: 0.625rem;
+  color: rgb(240 234 225 / 0.56);
+}
+
+@media (min-width: 560px) {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: none;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero::after {
+    display: none;
+  }
+  .subject {
+    right: -1.5vw;
+    height: min(94svh, 1200px);
+  }
+  .content {
+    justify-content: flex-end;
+    gap: 44px;
+    padding-top: calc(var(--header-h) + 120px);
+    padding-bottom: clamp(56px, 11svh, 132px);
+  }
+  .copy {
+    gap: 30px;
+  }
+  .lead {
+    max-width: 34ch;
+    font-size: var(--fs-lead);
+  }
+  .scroll {
+    position: absolute;
+    z-index: 2;
+    right: var(--gutter);
+    bottom: clamp(40px, 7svh, 72px);
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 44px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+  .scrollRule {
+    width: 56px;
+    height: 1px;
+    background: currentColor;
+    transform-origin: left;
+  }
+  .disclosure {
+    top: auto;
+    bottom: clamp(140px, 22svh, 220px);
+  }
+}
+
+/* Landscape desktops: size the portrait by width so the hair reaches toward
+   the headline instead of leaving a void between them. It always fills the
+   height; its base crops off-screen. */
+@media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
+  .subject {
+    --subject-top: clamp(48px, 6svh, 84px);
+    top: var(--subject-top);
+    bottom: auto;
+    right: -2vw;
+    height: max(
+      calc(max(100svh, 600px) - var(--subject-top)),
+      calc(60vw * 1402 / 1122)
+    );
+  }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .scrollRule {
+    animation: rule 2.8s var(--ease-out) infinite;
+  }
+}
+@keyframes rule {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}

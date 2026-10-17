@@ -1,0 +1,113 @@
+.pillars {
+  padding: clamp(72px, 10vw, 128px) 0 0;
+  background: var(--ink);
+}
+.heading {
+  padding: 0 var(--gutter);
+  margin-bottom: 28px;
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+}
+.item {
+  position: relative;
+}
+.panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(340px, 62svh, 520px);
+  overflow: hidden;
+  isolation: isolate;
+}
+.panel:focus-visible {
+  outline-offset: -6px;
+}
+.image {
+  z-index: -2;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 1600ms var(--ease-out);
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgb(10 9 11 / 0.9) 0%, rgb(10 9 11 / 0.2) 60%),
+    rgb(10 9 11 / 0.32);
+  transition: background-color 800ms var(--ease-out);
+}
+.content {
+  display: grid;
+  gap: 10px;
+  padding: 28px var(--gutter) 32px;
+}
+.name {
+  font-size: clamp(3.5rem, 15vw, 7rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.9;
+}
+.line {
+  max-width: 22rem;
+  color: var(--text-soft);
+}
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.panel:hover .image,
+.panel:focus-visible .image {
+  transform: scale(1.08);
+}
+.panel:hover .shade,
+.panel:focus-visible .shade {
+  background-color: rgb(10 9 11 / 0);
+}
+.panel:hover :global(.btn__arrow),
+.panel:focus-visible :global(.btn__arrow) {
+  transform: translateX(4px);
+}
+.disclosure {
+  padding: 14px var(--gutter) 0;
+  font-size: 0.625rem;
+}
+
+@media (min-width: 900px) {
+  .list {
+    display: flex;
+    height: min(86svh, 860px);
+  }
+  .item {
+    flex: 1 1 0;
+    transition: flex-grow 1000ms var(--ease-out);
+  }
+  .item:hover,
+  .item:focus-within {
+    flex-grow: 1.45;
+  }
+  .panel {
+    height: 100%;
+    min-height: 0;
+  }
+  .name {
+    font-size: clamp(3.5rem, 6vw, 7rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .image {
+    transition: none;
+  }
+}

@@ -1,0 +1,42 @@
+.progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 95;
+  height: 1px;
+  pointer-events: none;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--champagne);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 120;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid rgb(240 234 225 / 0.85);
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition:
+    opacity 300ms var(--ease-out),
+    width 400ms var(--ease-out),
+    height 400ms var(--ease-out),
+    margin 400ms var(--ease-out);
+}
+.cursor[data-visible='true'] {
+  opacity: 1;
+}
+.cursor[data-active='true'] {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+}

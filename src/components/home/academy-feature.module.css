@@ -1,0 +1,58 @@
+.academy {
+  display: grid;
+  gap: clamp(40px, 7vw, 80px);
+  padding: var(--section-pad) var(--gutter);
+  background: linear-gradient(180deg, var(--ink) 0%, var(--wine-deep) 100%);
+}
+
+.copy {
+  display: grid;
+  gap: 22px;
+  align-content: center;
+  justify-items: start;
+}
+.title {
+  font-size: var(--fs-h2);
+  max-width: 10ch;
+}
+.lead {
+  max-width: 30rem;
+  font-size: var(--fs-lead);
+  color: var(--text-soft);
+}
+.disciplines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  max-width: 32rem;
+  font-family: var(--font-display-stack);
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--champagne);
+}
+.disciplines li:not(:last-child)::after {
+  content: '·';
+  margin: 0 0.6em;
+  color: var(--line-strong);
+  font-style: normal;
+}
+.actions {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  margin-top: 8px;
+}
+.note {
+  max-width: 26rem;
+  font-size: var(--fs-small);
+  color: var(--taupe);
+}
+
+@media (min-width: 1024px) {
+  .academy {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: 7vw;
+    align-items: center;
+  }
+}

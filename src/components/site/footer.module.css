@@ -1,0 +1,92 @@
+.footer {
+  position: relative;
+  background: var(--ink-2);
+  border-top: 1px solid var(--line);
+  padding: clamp(64px, 9vw, 120px) var(--gutter)
+    max(28px, env(safe-area-inset-bottom));
+  font-size: var(--fs-small);
+  color: var(--text-soft);
+}
+
+.top {
+  display: grid;
+  gap: 48px 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.identity {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 28px;
+  justify-items: start;
+}
+.label {
+  --logo-width: 132px;
+}
+.motto {
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  color: var(--ivory);
+}
+
+.col .eyebrow {
+  margin-bottom: 14px;
+}
+.col ul {
+  display: grid;
+}
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--ivory);
+  transition: color var(--dur-ui) var(--ease-out);
+}
+.link:hover {
+  color: var(--champagne);
+}
+.address {
+  font-style: normal;
+  color: var(--ivory);
+  margin-bottom: 14px;
+}
+
+.bottom {
+  display: grid;
+  gap: 14px;
+  margin-top: clamp(56px, 8vw, 104px);
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 0.78125rem;
+}
+.note {
+  max-width: 62ch;
+  color: var(--taupe);
+}
+.top_link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ivory);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  justify-self: start;
+}
+
+@media (min-width: 900px) {
+  .top {
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  }
+  .identity {
+    grid-column: auto;
+  }
+  .bottom {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 32px;
+  }
+  .note {
+    justify-self: center;
+    text-align: center;
+  }
+}

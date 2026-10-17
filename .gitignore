@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+/.pnpm-store
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# testing
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# local
+.DS_Store
+*.pem
+.env*
+!.env.example
+.vercel
+
+# original master images live outside the deployable app (see docs/MEDIA.md)
+/assets/source/*.png

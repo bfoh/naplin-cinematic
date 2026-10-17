@@ -1,0 +1,137 @@
+/* The one ivory chapter: the salon, in daylight. */
+.salon {
+  display: grid;
+  gap: clamp(48px, 8vw, 96px);
+  padding: var(--section-pad) var(--gutter);
+  background: var(--ivory);
+  color: var(--ink);
+}
+.salon :focus-visible {
+  outline-color: var(--burgundy);
+}
+
+.intro {
+  display: grid;
+  gap: 22px;
+  align-content: start;
+}
+.eyebrow {
+  color: var(--burgundy);
+}
+.title {
+  font-size: var(--fs-h2);
+  max-width: 9ch;
+}
+.title em {
+  color: var(--burgundy);
+}
+.copy {
+  max-width: 30rem;
+  font-size: var(--fs-lead);
+  color: #3b3236;
+}
+.actions {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  margin-top: 6px;
+}
+.note {
+  max-width: 28rem;
+  font-size: var(--fs-small);
+  color: var(--taupe-ink);
+}
+
+.rows {
+  border-top: 1px solid var(--line-ink);
+}
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+  padding: clamp(20px, 2.6vw, 34px) 0;
+  border-bottom: 1px solid var(--line-ink);
+}
+.row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--burgundy);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 700ms var(--ease-out);
+}
+.name {
+  font-size: clamp(2.5rem, 9vw, 5.75rem);
+  line-height: 1;
+  transition:
+    transform 700ms var(--ease-out),
+    color var(--dur-ui) var(--ease-out);
+}
+.line {
+  grid-column: 1;
+  margin-top: 8px;
+  font-size: var(--fs-small);
+  color: var(--taupe-ink);
+}
+.arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 28px;
+  height: 14px;
+  color: var(--burgundy);
+  transition: transform 700ms var(--ease-out);
+}
+.row:hover::before,
+.row:focus-visible::before {
+  transform: scaleX(1);
+}
+.row:hover .name,
+.row:focus-visible .name {
+  transform: translateX(14px);
+  color: var(--burgundy);
+  font-style: italic;
+}
+.row:hover .arrow,
+.row:focus-visible .arrow {
+  transform: translateX(6px);
+}
+
+.figure {
+  max-width: 420px;
+}
+.figure figcaption {
+  color: var(--taupe-ink);
+}
+
+@media (min-width: 1024px) {
+  .salon {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 6vw;
+    row-gap: 64px;
+  }
+  .intro {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .rows {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    margin-top: 1.2vw;
+  }
+  .line {
+    grid-column: 1;
+  }
+  .figure {
+    grid-column: 1;
+    grid-row: 2;
+    width: min(100%, 26vw);
+  }
+}

@@ -1,0 +1,208 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  transition: transform 640ms var(--ease-out);
+}
+
+/* Surface fades in once the page leaves the hero top. */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(10 9 11 / 0.92);
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out);
+}
+.scrolled::before {
+  opacity: 1;
+}
+
+.hidden {
+  transform: translateY(calc(-100% - 48px));
+}
+.header:focus-within {
+  transform: none;
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--header-h);
+  padding: 0 var(--gutter);
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+
+/* The logo sits directly on the page and settles into the compact bar. */
+.brand {
+  align-self: flex-start;
+  flex: none;
+  margin-top: 12px;
+  transition: margin 600ms var(--ease-out);
+}
+.brand:focus-visible {
+  outline-offset: 6px;
+}
+.label {
+  --logo-width: 92px;
+}
+.label img {
+  transition: width 600ms var(--ease-out);
+}
+.scrolled .brand {
+  margin-top: 9px;
+}
+.scrolled .label {
+  --logo-width: 64px;
+}
+
+@media (min-width: 768px) {
+  .brand {
+    margin-top: 16px;
+  }
+  .label {
+    --logo-width: 132px;
+  }
+  .scrolled .brand {
+    margin-top: 10px;
+  }
+  .scrolled .label {
+    --logo-width: 80px;
+  }
+}
+
+.nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .nav ul {
+    display: flex;
+    gap: clamp(24px, 3vw, 48px);
+  }
+}
+
+.navLink,
+.book,
+.menuButton {
+  font-size: 0.71875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.navLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 420ms var(--ease-out);
+}
+.navLink:hover::after,
+.navLink[aria-current='page']::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.navLink[aria-current='page'] {
+  color: var(--champagne);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.book {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line-strong);
+  transition:
+    border-color var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out),
+    color var(--dur-ui) var(--ease-out);
+}
+.book:hover,
+.book[aria-current='page'] {
+  border-color: var(--ivory);
+  background: var(--ivory);
+  color: var(--ink);
+}
+.bookLong {
+  display: none;
+}
+@media (min-width: 1280px) {
+  .bookShort {
+    display: none;
+  }
+  .bookLong {
+    display: inline;
+  }
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: flex-end;
+}
+.menuIcon {
+  display: grid;
+  gap: 6px;
+  width: 26px;
+}
+.menuIcon span {
+  height: 1px;
+  background: currentColor;
+}
+.menuIcon span:last-child {
+  width: 62%;
+  justify-self: end;
+}
+.menuText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+@media (min-width: 480px) {
+  .menuText {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+  }
+}
+@media (min-width: 1024px) {
+  .menuButton {
+    display: none;
+  }
+}

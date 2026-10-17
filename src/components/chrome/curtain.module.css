@@ -1,0 +1,52 @@
+.curtain {
+  display: none;
+}
+
+:global(html[data-curtain='on']) .curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 28px;
+  background: var(--ink);
+  /* Failsafe: never trap the page, even if the script fails. */
+  animation: curtain-failsafe 0.6s 4s forwards;
+}
+
+.word {
+  display: flex;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-style: italic;
+  white-space: nowrap;
+}
+.mask {
+  display: inline-block;
+  overflow: clip;
+  padding: 0.04em 0.02em 0.14em;
+}
+.letter {
+  display: inline-block;
+}
+
+.rule {
+  position: relative;
+  width: min(220px, 50vw);
+  height: 1px;
+  background: var(--line);
+}
+.rule span {
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+@keyframes curtain-failsafe {
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}

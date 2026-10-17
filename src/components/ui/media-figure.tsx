@@ -1,0 +1,80 @@
+import Image from 'next/image';
+import type { CSSProperties } from 'react';
+
+import type { MediaAsset } from '@/content/media';
+import styles from './figure.module.css';
+
+type Props = {
+  asset: MediaAsset;
+  sizes: string;
+  /** Aspect ratio of the frame, e.g. "4 / 5". Omit when the parent sizes it. */
+  ratio?: string;
+  position?: string;
+  priority?: boolean;
+  reveal?: 'clip' | 'fade';
+  parallax?: number;
+  caption?: 'below' | 'overlay' | 'none';
+  className?: string;
+  frameClassName?: string;
+  delay?: number;
+  quality?: 72 | 80 | 88;
+};
+
+/**
+ * A single photograph with reserved geometry and a visible provenance caption.
+ */
+export function MediaFigure({
+  asset,
+  sizes,
+  ratio,
+  position = '50% 50%',
+  priority = false,
+  reveal,
+  parallax,
+  caption = 'below',
+  className,
+  frameClassName,
+  delay,
+  quality = 80,
+}: Props) {
+  const img = (
+    <Image
+      src={asset.image}
+      alt={asset.alt}
+      sizes={sizes}
+      priority={priority}
+      quality={quality}
+      placeholder={priority ? 'empty' : 'blur'}
+      style={{ objectPosition: position }}
+    />
+  );
+  const frameStyle: CSSProperties | undefined = ratio
+    ? { aspectRatio: ratio }
+    : undefined;
+
+  return (
+    <figure className={[styles.figure, className].filter(Boolean).join(' ')}>
+      <div
+        className={['frame', frameClassName].filter(Boolean).join(' ')}
+        style={frameStyle}
+        data-reveal={reveal}
+        data-delay={delay}
+      >
+        {parallax ? (
+          <div className="parallax" data-parallax={parallax}>
+            {img}
+          </div>
+        ) : (
+          img
+        )}
+      </div>
+      {caption === 'none' ? null : (
+        <figcaption
+          className={`caption ${caption === 'overlay' ? styles.overlayCaption : styles.caption}`}
+        >
+          {asset.disclosure}
+        </figcaption>
+      )}
+    </figure>
+  );
+}

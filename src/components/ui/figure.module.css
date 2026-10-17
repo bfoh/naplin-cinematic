@@ -1,0 +1,18 @@
+.figure {
+  position: relative;
+}
+
+.caption {
+  margin-top: 12px;
+}
+
+.overlayCaption {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 2;
+  max-width: calc(100% - 28px);
+  text-align: right;
+  color: rgb(240 234 225 / 0.78);
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.5);
+}

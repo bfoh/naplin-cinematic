@@ -1,0 +1,8 @@
+.logo {
+  display: block;
+}
+
+.logo img {
+  width: var(--logo-width, 96px);
+  height: auto;
+}

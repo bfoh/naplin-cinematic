@@ -1,0 +1,5 @@
+# Standalone workspace root. Without this file pnpm walks up the directory tree
+# and would adopt the parent `naplin` workspace (and its lockfile).
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

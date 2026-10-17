@@ -1,0 +1,16 @@
+.next
+node_modules
+pnpm-lock.yaml
+naplin-cinematic-kit
+public
+artifacts
+playwright-report
+test-results
+assets
+docs/BRIEF.md
+docs/CONTENT.md
+docs/DESIGN.md
+docs/IMPLEMENTATION.md
+docs/KIT-README.md
+docs/MEDIA.md
+scripts/polish-supplied.py

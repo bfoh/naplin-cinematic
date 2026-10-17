@@ -1,0 +1,47 @@
+.grid {
+  display: grid;
+  gap: 2px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: clamp(24px, 3vw, 40px);
+  background: var(--ink);
+}
+.big {
+  font-family: var(--font-display-stack);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
+  line-height: 1.15;
+}
+.services {
+  display: grid;
+}
+.services a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-display-stack);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 300;
+  transition: color var(--dur-ui) var(--ease-out);
+}
+.services a:hover {
+  color: var(--champagne);
+  font-style: italic;
+}
+.inline {
+  color: var(--ivory);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

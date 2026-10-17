@@ -1,0 +1,120 @@
+.confidence {
+  position: relative;
+  background: var(--crimson-field);
+  overflow: clip;
+}
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 28px;
+  padding: var(--section-pad) var(--gutter);
+  background:
+    radial-gradient(70% 60% at 50% 38%, #5c0912 0%, rgb(79 9 17 / 0) 72%),
+    linear-gradient(to bottom, var(--crimson-field) 60%, #160306 100%);
+}
+
+.title {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  font-size: clamp(3.75rem, 17vw, 8rem);
+  line-height: 0.86;
+}
+.wear,
+.conf {
+  display: block;
+}
+.conf {
+  justify-self: end;
+}
+
+.figure {
+  position: relative;
+  margin-top: -0.6em;
+  font-size: clamp(3.75rem, 17vw, 8rem);
+}
+.aperture {
+  position: relative;
+  aspect-ratio: 1058 / 1330;
+  overflow: hidden;
+  /* Feather the frame into the matched field. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 9%,
+    #000 91%,
+    transparent
+  );
+}
+.aperture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.disclosure {
+  margin-top: 12px;
+  font-size: 0.625rem;
+  color: rgb(240 234 225 / 0.6);
+}
+
+.after {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+  max-width: 26rem;
+  color: var(--text-soft);
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    height: 100svh;
+    min-height: 620px;
+    padding: 0 var(--gutter);
+    grid-template-columns: minmax(0, 1fr);
+    align-content: stretch;
+  }
+  .figure {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 100%;
+    margin: 0;
+    transform: translateX(-50%);
+  }
+  .aperture {
+    height: 100%;
+    width: auto;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 14%,
+      #000 86%,
+      transparent
+    );
+  }
+  .disclosure {
+    position: absolute;
+    right: -11rem;
+    bottom: 28px;
+    width: 10rem;
+  }
+  .title {
+    align-self: center;
+    font-size: clamp(5.5rem, 11.5vw, 13rem);
+    pointer-events: none;
+  }
+  .wear {
+    margin-top: -6svh;
+  }
+  .conf {
+    margin-top: 26svh;
+  }
+  .after {
+    position: absolute;
+    left: var(--gutter);
+    bottom: clamp(32px, 7svh, 72px);
+    max-width: 21rem;
+  }
+}
