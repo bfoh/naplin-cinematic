@@ -6,8 +6,7 @@
   isolation: isolate;
   display: grid;
   align-content: center;
-  /* Phones: the photograph's own backdrop colour, so image and section are one. */
-  background: #66341f;
+  background: var(--oxblood);
   overflow: clip;
   padding: clamp(80px, 22vw, 140px) 0 clamp(56px, 14vw, 96px);
 }
@@ -56,9 +55,6 @@
 }
 .cutout {
   object-position: 74% 0%;
-  /* Only the bust's lower edge melts into the section; face and hair stay crisp. */
-  -webkit-mask-image: linear-gradient(to top, transparent, #000 12%);
-  mask-image: linear-gradient(to top, transparent, #000 12%);
 }
 
 .mood {
@@ -72,7 +68,6 @@
 
 @media (min-width: 900px) {
   .flow {
-    background: var(--oxblood);
     --title-size: clamp(7rem, 15.5vw, 17rem);
     min-height: max(100svh, 680px);
     padding: 0;

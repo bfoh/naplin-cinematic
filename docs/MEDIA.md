@@ -66,7 +66,7 @@ No image-generation tool was available to the implementing agent, so **no new im
 | `chapter-movement-concept.webp` | movement (opaque) | 4:5 hair only (0,300,688×860) | Movement | Generated campaign concept |
 | `chapter-finish-concept.webp` | supplied curls portrait | 4:5 (150,0,947×1184) | Finish | Generated campaign concept |
 | `flow-confidence-concept.webp` | confidence | full | Let it flow | Generated campaign concept |
-| `flow-confidence-cutout-concept.webp` | confidence, studio backdrop removed with Apple Vision subject lifting (`scripts/lift-subject.swift`, master `campaign-confidence-cutout-concept.png`) | full, alpha | Let it flow on phones, resting on the section colour | — |
+| `flow-confidence-cutout-concept.webp` | confidence, studio backdrop removed with Apple Vision subject lifting (`scripts/lift-subject.swift`, raw `campaign-confidence-lifted-raw.png`), then edge colour decontaminated so no terracotta halo shows on wine (`scripts/defringe-cutout.py`, master `campaign-confidence-cutout-concept.png`) | full, alpha | Let it flow on phones, resting on the wine section, no fades | — |
 | `campaign-crimson-concept.webp` | supplied crimson portrait | full | Wear your confidence | Generated campaign concept |
 | `portrait-waves-concept.webp` | waves | full | Pillars: Hair | (section caption) |
 | `portrait-straight-concept.webp` | straight | full | Hair Edit / Shop: Closure Wigs | Generated campaign concept · styling illustration |
