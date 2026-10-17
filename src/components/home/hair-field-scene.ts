@@ -187,6 +187,7 @@ export function createHairField(
   let frameInterval = compact ? 1000 / 30 : 0;
   // Older GPUs: lower resolution, then 30 fps, then hold a still frame.
   const govern = createQualityGovernor(3, (level) => {
+    canvas.dataset.quality = String(level); // diagnostics
     if (level === 1) {
       renderer.setPixelRatio(baseRatio * 0.65);
       fit();

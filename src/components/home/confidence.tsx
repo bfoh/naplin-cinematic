@@ -110,9 +110,6 @@ export function Confidence() {
               quality={80}
             />
           </div>
-          <figcaption className={`caption ${styles.disclosure}`}>
-            {media.confidence.disclosure}
-          </figcaption>
         </figure>
 
         <div className={styles.after} data-after>

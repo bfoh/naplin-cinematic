@@ -32,18 +32,12 @@
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  margin: calc(var(--title-size) * -0.42) var(--gutter) 0;
-}
-.media {
-  /* Feather every edge so the photograph dissolves into the section. */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent),
-    linear-gradient(to bottom, transparent, #000 12%, #000 90%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent),
-    linear-gradient(to bottom, transparent, #000 12%, #000 90%, transparent);
-  mask-composite: intersect;
+  /* Phones: edge to edge and crisp, so the portrait leads the section. Its
+     backdrop matches the section colour, so the sides need no feathering;
+     only the top softens where "flow." overlaps it. */
+  margin: calc(var(--title-size) * -0.42) 0 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9%);
+  mask-image: linear-gradient(to bottom, transparent, #000 9%);
 }
 .image {
   width: 100%;
@@ -54,11 +48,6 @@
 .veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgb(102 52 31 / 0.5),
-    rgb(102 52 31 / 0) 26%
-  );
 }
 
 .mood {
@@ -68,12 +57,6 @@
   font-style: italic;
   font-weight: 300;
   line-height: 1.2;
-}
-
-.disclosure {
-  margin: 14px var(--gutter) 0;
-  /* 0.82 keeps 4.5:1+ on the lighter mobile backdrop. */
-  color: rgb(240 234 225 / 0.82);
 }
 
 @media (min-width: 900px) {
@@ -112,11 +95,5 @@
     z-index: 2;
     margin: 4.5svh 0 0 calc(var(--gutter) + 9vw + 0.35em);
     font-size: clamp(1.5rem, 2vw, 2rem);
-  }
-  .disclosure {
-    position: absolute;
-    right: var(--gutter);
-    bottom: 28px;
-    margin: 0;
   }
 }

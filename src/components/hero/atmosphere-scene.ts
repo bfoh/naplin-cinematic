@@ -377,6 +377,7 @@ export function createHeroScene(
 
   // Older GPUs: lower resolution, then 30 fps, then hold a still frame.
   const govern = createQualityGovernor(3, (level) => {
+    canvas.dataset.quality = String(level); // diagnostics
     if (level === 1) {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
       targetScale *= 0.7;

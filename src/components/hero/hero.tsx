@@ -61,7 +61,6 @@ export function Hero() {
         <span>Scroll</span>
         <span className={styles.scrollRule} aria-hidden="true" />
       </a>
-      <p className={`caption ${styles.disclosure}`}>{media.hero.disclosure}</p>
       <HeroMotion />
     </section>
   );

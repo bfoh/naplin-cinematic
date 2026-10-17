@@ -33,7 +33,6 @@ export function Flow() {
         <br />
         is the mood.
       </p>
-      <p className={`caption ${styles.disclosure}`}>{media.flow.disclosure}</p>
     </section>
   );
 }

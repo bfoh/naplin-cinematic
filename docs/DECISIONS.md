@@ -19,7 +19,7 @@ Consequential choices made while building the cinematic edition, with the eviden
 ## Imagery
 
 - No image-generation tool was available, so the build uses the owner's eight approved concept photographs (full-quality PNG masters from the owner's earlier session) plus three images the owner generated and supplied during this build. Provenance per file: `docs/MEDIA.md`.
-- **Every photograph is a separate file** with alt text and a visible disclosure. The concept mockup is used only as a reference in `docs/reference/` and is never served.
+- **Every photograph is a separate file** with alt text. Per-image "Generated campaign concept" captions were removed at the owner's direction (2026-10-17); the footer, `/story`, `/shop` and `/academy` keep plain-language notes that the photography is generated concept imagery. The concept mockup is used only as a reference in `docs/reference/` and is never served.
 - **Logo directly on the dark page (owner direction, 2026-10-17).** The official crimson-to-plum artwork loses its plum half on ink, so an ivory label was used first. At the owner's request it now sits directly on the background as a derived on-dark variant: only the darkest tones are lifted toward 40% lightness, hue and shapes unchanged. Four treatments were compared on the real hero background (original, lifted, ivory, mixed); the lifted version was the most faithful one that stays legible. Original file untouched; an official on-dark lockup would replace it.
 - **Campaign aperture instead of an upscaled 16:9.** The 1058 px crimson portrait is feathered into a field matched to its own backdrop (sampled `#5C0912`), so it reads full-bleed without enlarging the master.
 
@@ -50,3 +50,9 @@ Measured with Lighthouse mobile (emulated mid-range phone, slow 4G, 4x CPU), med
 - **Battery:** no fixed grain layer on phones; the closing hair field renders only while it moves.
 - **Icons:** `icon.png`, `apple-icon.png` and a web manifest from the official on-dark logo, scaled on ink (no new mark).
 - **"Let it flow" on phones (owner request):** the section takes the photograph's own backdrop colour (#66341F, sampled from its edges) and the photo is feathered on all sides, so image and section read as one. Desktop keeps the wine treatment.
+
+## Owner review, 2026-10-17 (live site)
+
+- **Captions removed** from all images at the owner's request; site-wide imagery notes and alt text remain (see above).
+- **"Let it flow" on phones:** edge-to-edge and crisp (top fade only) so the portrait stands out; its backdrop still matches the section colour (#66341F).
+- **Desktop hair animation froze — fixed.** The quality governor compared the _average_ frame time against 24 ms after a 45-frame warm-up; one-off start-up tasks on desktop (SplitText, shader compilation; up to ~700 ms each) pushed the average over the limit and stepped the scene down to a still frame on capable machines. It now uses the median of each window, needs two slow windows in a row, waits ~2 s before judging, and freezes only below ~25 fps. The level is exposed as `data-quality` on the canvas. Verified at 1440×783: level 0 throughout ~80 s and continuous hair movement (software WebGL).

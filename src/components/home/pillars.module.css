@@ -78,10 +78,6 @@
 .panel:focus-visible :global(.btn__arrow) {
   transform: translateX(4px);
 }
-.disclosure {
-  padding: 14px var(--gutter) 0;
-  font-size: 0.625rem;
-}
 
 @media (min-width: 900px) {
   .list {

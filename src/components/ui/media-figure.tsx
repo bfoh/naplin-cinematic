@@ -14,7 +14,6 @@ type Props = {
   priority?: boolean;
   reveal?: 'clip' | 'fade';
   parallax?: number;
-  caption?: 'below' | 'overlay' | 'none';
   className?: string;
   frameClassName?: string;
   delay?: number;
@@ -22,7 +21,8 @@ type Props = {
 };
 
 /**
- * A single photograph with reserved geometry and a visible provenance caption.
+ * A single photograph with reserved geometry. Provenance is recorded in
+ * media.ts and disclosed site-wide (footer note), not captioned per image.
  */
 export function MediaFigure({
   asset,
@@ -32,7 +32,6 @@ export function MediaFigure({
   priority = false,
   reveal,
   parallax,
-  caption = 'below',
   className,
   frameClassName,
   delay,
@@ -70,13 +69,6 @@ export function MediaFigure({
           img
         )}
       </div>
-      {caption === 'none' ? null : (
-        <figcaption
-          className={`caption ${caption === 'overlay' ? styles.overlayCaption : styles.caption}`}
-        >
-          {asset.disclosure}
-        </figcaption>
-      )}
     </figure>
   );
 }

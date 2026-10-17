@@ -28,7 +28,7 @@ export type Provenance = 'owner-generated' | 'authentic';
 export type MediaAsset = {
   image: StaticImageData;
   alt: string;
-  /** Short visible disclosure shown with the image. */
+  /** Short provenance label (no longer shown on the image; see footer note). */
   disclosure: string;
   provenance: Provenance;
   /** Master file in assets/source and any crop applied by scripts/build-media.mjs. */

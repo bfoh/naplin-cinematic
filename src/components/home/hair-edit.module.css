@@ -89,10 +89,6 @@
 .card:focus-visible .more :global(.btn__arrow) {
   transform: translateX(4px);
 }
-.disclosure {
-  margin-top: 4px;
-  font-size: 0.625rem;
-}
 
 @media (min-width: 1024px) {
   .head {

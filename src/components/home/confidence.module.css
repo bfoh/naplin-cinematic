@@ -53,11 +53,6 @@
   height: 100%;
   object-fit: cover;
 }
-.disclosure {
-  margin-top: 12px;
-  font-size: 0.625rem;
-  color: rgb(240 234 225 / 0.6);
-}
 
 .after {
   display: grid;
@@ -93,12 +88,6 @@
       #000 86%,
       transparent
     );
-  }
-  .disclosure {
-    position: absolute;
-    right: -11rem;
-    bottom: 28px;
-    width: 10rem;
   }
   .title {
     align-self: center;

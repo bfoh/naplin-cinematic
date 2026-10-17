@@ -64,9 +64,6 @@ export function Pillars() {
           </li>
         ))}
       </ul>
-      <p className={`caption ${styles.disclosure}`}>
-        Generated campaign concepts
-      </p>
     </section>
   );
 }

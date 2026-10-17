@@ -29,35 +29,38 @@ export async function decodeChosenImage(img: HTMLImageElement) {
 }
 
 /**
- * Steps a scene's quality down when the device struggles. Feed it each
- * frame's delta while the scene animates; after a warm-up it averages ~1.5 s
- * windows, and when frames run slower than ~42 fps it calls `apply` with the
- * next level (1…levels). Old integrated GPUs then degrade gracefully instead
- * of stuttering.
+ * Steps a scene's quality down when the device genuinely struggles. Feed it
+ * each frame's delta while the scene animates. After a ~2 s warm-up it takes
+ * the MEDIAN of ~1.5 s windows, so one-off long tasks (page start-up, text
+ * splitting, shader compilation) are not mistaken for a slow GPU. Two slow
+ * windows in a row step down one level: below ~42 fps for the intermediate
+ * levels, below ~25 fps before the final level (a held still frame).
  */
 export function createQualityGovernor(
   levels: number,
   apply: (level: number) => void,
 ) {
   let level = 0;
-  let warmup = 45; // skip shader compilation and texture upload spikes
-  let total = 0;
-  let samples = 0;
+  let warmup = 120;
+  let window: number[] = [];
+  let slowStreak = 0;
   return (deltaMs: number) => {
     if (level >= levels) return;
     if (warmup > 0) {
       warmup -= 1;
       return;
     }
-    total += deltaMs;
-    samples += 1;
-    if (samples < 90) return;
-    const average = total / samples;
-    total = 0;
-    samples = 0;
-    if (average > 24) {
+    window.push(deltaMs);
+    if (window.length < 90) return;
+    window.sort((a, b) => a - b);
+    const median = window[window.length >> 1] ?? 0;
+    window = [];
+    const limit = level + 1 >= levels ? 40 : 24;
+    slowStreak = median > limit ? slowStreak + 1 : 0;
+    if (slowStreak >= 2) {
+      slowStreak = 0;
       level += 1;
-      warmup = 30;
+      warmup = 60;
       apply(level);
     }
   };

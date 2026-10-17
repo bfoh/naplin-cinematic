@@ -59,7 +59,7 @@ No image-generation tool was available to the implementing agent, so **no new im
 
 ## Web files (`src/media/`, produced by `pnpm media`)
 
-| File | From | Crop | Used in | Visible label |
+| File | From | Crop | Used in | Label (alt/provenance; no longer shown on image) |
 | --- | --- | --- | --- | --- |
 | `hero-movement-cutout-concept.webp` | movement cutout | full, alpha | Hero. Rendered as `<img>`, then (with WebGL and motion allowed) drawn identically in the hero canvas, where only the hair is animated by a shader displacement; face, neck, shoulder and gown stay still; the left edge, which the source photo crops, is feathered | Generated campaign concept |
 | `chapter-texture-concept.webp` | supplied macro | 4:5 (133,0,1064×1330) | Texture | Generated campaign concept |
@@ -77,7 +77,7 @@ No image-generation tool was available to the implementing agent, so **no new im
 | `brand/hair-by-naplin-logo-on-dark.png` | official logo, trimmed (`assets/brand/hair-by-naplin-logo-trimmed.png`, empty canvas only: 640,5,1008×705) | dark tones lifted (see below) | Header, menu, footer, share image | — |
 | `src/app/opengraph-image.jpg` | logo + cutout | composed 1200×630 | Social share image | — |
 
-Every rendered photograph is a separate file with its own alt text and a visible disclosure; the footer and `/story` carry a site-wide imagery note. Sizes and formats are served by `next/image` (AVIF, then WebP).
+Every rendered photograph is a separate file with its own alt text. At the owner's direction (2026-10-17) the per-image captions were removed; the footer, `/story`, `/shop` and `/academy` carry plain-language imagery note. Sizes and formats are served by `next/image` (AVIF, then WebP).
 
 ## Logo presentation
 

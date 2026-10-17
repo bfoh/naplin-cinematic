@@ -4,7 +4,7 @@ A standalone, cinematic brand experience for **Hair By Naplin**, Kumasi: luxury 
 
 This is an independent project. It shares no code, config, dependencies or runtime URLs with the original Naplin site and deploys as its own Vercel project.
 
-> **Status:** a working, production-buildable brand site. Shopping and online booking are not live, and the site says so: customers are directed to call. Photography is generated campaign concept imagery, labelled as such (see `docs/MEDIA.md`).
+> **Status:** a working, production-buildable brand site. Shopping and online booking are not live, and the site says so: customers are directed to call. Photography is generated campaign concept imagery, disclosed in a site-wide note in the footer and on the Story page (see `docs/MEDIA.md`).
 
 ## Stack
 

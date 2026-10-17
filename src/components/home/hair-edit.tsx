@@ -69,9 +69,6 @@ export function HairEdit() {
                   </span>
                 </div>
               </Link>
-              <p className={`caption ${styles.disclosure}`}>
-                {asset.disclosure}
-              </p>
             </li>
           );
         })}

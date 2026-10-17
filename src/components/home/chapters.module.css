@@ -77,9 +77,6 @@
   opacity: 0;
   pointer-events: none;
 }
-.caption {
-  margin-top: 10px;
-}
 
 .progress {
   display: none;

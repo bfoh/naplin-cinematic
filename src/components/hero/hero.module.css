@@ -127,16 +127,6 @@
   display: none;
 }
 
-.disclosure {
-  position: absolute;
-  z-index: 2;
-  right: var(--gutter);
-  top: calc(var(--header-h) + 18px);
-  writing-mode: vertical-rl;
-  font-size: 0.625rem;
-  color: rgb(240 234 225 / 0.56);
-}
-
 @media (min-width: 560px) {
   .actions {
     display: flex;
@@ -186,10 +176,6 @@
     height: 1px;
     background: currentColor;
     transform-origin: left;
-  }
-  .disclosure {
-    top: auto;
-    bottom: clamp(140px, 22svh, 220px);
   }
 }
 

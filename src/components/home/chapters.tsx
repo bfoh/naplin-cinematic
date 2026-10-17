@@ -199,9 +199,6 @@ export function Chapters() {
                     aria-hidden="true"
                   />
                 </div>
-                <figcaption className={`caption ${styles.caption}`}>
-                  {asset.disclosure}
-                </figcaption>
               </figure>
             </article>
           );

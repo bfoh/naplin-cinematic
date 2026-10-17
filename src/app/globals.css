@@ -222,16 +222,6 @@ html.lenis body {
   max-width: 34ch;
 }
 
-.caption {
-  font-family: var(--font-sans-stack);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--taupe);
-}
-
 /* Buttons: sharp, quiet, unmistakable. */
 .btn {
   --btn-fg: var(--ink);
